@@ -15,7 +15,7 @@
         android:layout_width="272dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left|center_vertical"
-        android:text="Taco" />
+         />
 
     <Button
         android:id="@+id/button"
