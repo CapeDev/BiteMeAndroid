@@ -5,10 +5,10 @@
     <string name="app_name">bitemoi</string>
     <string name="location">Location</string>
     <string name="foodSearch">Search</string>
-    <string name="consumer.key">z6UnbYAtLlT_OYHwHmz1hg</string>
-    <string name="consumer.secret">IEax9DGQDbPLTdk5tWWIj06FzJ8</string>
-    <string name="token.key">q6KmlMOuh-QEp3pXOPhkSox5TqjRI7Xh</string>
-    <string name="token.secret">Vhsrc45UAGL3NuVmDRDjFMKu08w</string>
+    <string name="consumer.key">A-FsSCcVrjEun0lup_SXAA</string>
+    <string name="consumer.secret">26ssCG7D2PHDmBRloRICDFxyx9M</string>
+    <string name="token.key">Yfh3RFacDZEBRR6S-pfFi_pcWdQ5s7JV</string>
+    <string name="token.secret">YkS9xm4cuhBwHFZM4i-HfbXgn14</string>
     <string name="go_button">GO</string>
     <string name="search_box">search</string>
     <string name="results_indicator">results ...</string>

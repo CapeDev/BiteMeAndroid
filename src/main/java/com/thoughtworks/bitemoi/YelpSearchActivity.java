@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class YelpSearchActivity extends Activity {
@@ -28,19 +27,21 @@ public class YelpSearchActivity extends Activity {
         setTitle("Food search");
     }
 
-    protected List<String> processJson(String jsonStuff) throws JSONException {
+    protected List<Restaurant> processJson(String jsonStuff) throws JSONException {
         JSONObject json = new JSONObject(jsonStuff);
         JSONArray businesses = json.getJSONArray("businesses");
-        ArrayList<String> businessNames = new ArrayList<String>(
-                businesses.length());
+        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>(businesses.length());
         for (int i = 0; i < businesses.length(); i++) {
             JSONObject business = businesses.getJSONObject(i);
-            businessNames.add(business.getString("name"));
+            String imageUrl = business.getString("image_url");
+            String name = business.getString("name");
+            double rating = business.getDouble("rating");
+            restaurants.add(new Restaurant(name, rating, imageUrl));
         }
-        return businessNames;
+        return restaurants;
     }
 
-    public void searchForRestaurant(View v) {
+    public void searchForRestaurant(View view) {
         EditText searchKey = (EditText) findViewById(R.id.search);
         final String val = searchKey.getText().toString();
         searchResultsView = (ListView) findViewById(R.id.searchResult);
@@ -49,13 +50,13 @@ public class YelpSearchActivity extends Activity {
         searchResultsView.setAdapter(adapter);
 
         setProgressBarIndeterminateVisibility(true);
-        new AsyncTask<Void, Void, List<String>>() {
+        new AsyncTask<Void, Void, List<Restaurant>>() {
             @Override protected void onPreExecute() {
                 adapter.clear();
             }
 
             @Override
-            protected List<String> doInBackground(Void... params) {
+            protected List<Restaurant> doInBackground(Void... params) {
                 YelpProxy yelp = YelpProxy.getYelp(YelpSearchActivity.this);
                 String businesses = yelp.search(val, 37.788022, -122.399797);
                 try {
@@ -66,20 +67,11 @@ public class YelpSearchActivity extends Activity {
             }
 
             @Override
-            protected void onPostExecute(List<String> result) {
-                adapter.addAll(toRestaurants(result));
+            protected void onPostExecute(List<Restaurant> restaurants) {
+                adapter.addAll(restaurants);
                 setProgressBarIndeterminateVisibility(false);
             }
         }.execute();
 
     }
-
-    private List<Restaurant> toRestaurants(List<String> result) {
-        List<Restaurant> restaurants = new ArrayList<Restaurant>();
-        for(String name : result){
-            restaurants.add(new Restaurant(name));
-        }
-        return Collections.unmodifiableList(restaurants);
-    }
-
 }
