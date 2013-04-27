@@ -39,11 +39,15 @@ public class YelpSearchActivity extends Activity {
             Double distance = Double.parseDouble(restaurantJson.getString("distance")) * metersToMilesConversion;
             DecimalFormat roundedDistance = new DecimalFormat("#.##");
             String formattedDistance = roundedDistance.format(distance) + "mi";
+            double rating = restaurantJson.getDouble("rating");
+            String name = restaurantJson.getString("name");
+            String image_url = restaurantJson.getString("image_url");
+
             Restaurant restaurant = new Restaurant.Builder()
-                    .withName(restaurantJson.getString("name"))
+                    .withName(name)
                     .withDistance(formattedDistance)
-                    .withImageURL(restaurantJson.getString("image_url"))
-                    .withRating(restaurantJson.getString("rating"))
+                    .withImageURL(image_url)
+                    .withRating(rating)
                     .build();
 
             Log.v("Json Array", restaurantJson.toString());
@@ -54,7 +58,7 @@ public class YelpSearchActivity extends Activity {
         return restaurants;
     }
 
-    public void searchForRestaurant(final View view) {
+    public void searchForRestaurant(View view) {
         EditText searchKey = (EditText) findViewById(R.id.search);
         final String val = searchKey.getText().toString();
         final ListView searchResultsView = (ListView) findViewById(R.id.search_results);
@@ -64,7 +68,6 @@ public class YelpSearchActivity extends Activity {
         final RestaurantListAdapter adapter = new RestaurantListAdapter(this, restaurants);
         searchResultsView.setAdapter(adapter);
 
-        setProgressBarIndeterminateVisibility(true);
         setProgressBarIndeterminateVisibility(true);
         new AsyncTask<Void, Void, List<Restaurant>>() {
             @Override protected void onPreExecute() {

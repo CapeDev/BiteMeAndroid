@@ -3,7 +3,7 @@ package com.thoughtworks.bitemoi.models;
 public class Restaurant {
     private String name;
     private String imageURL;
-    private String rating;
+    private Double rating;
     private String distance;
     private String price;
 
@@ -19,11 +19,11 @@ public class Restaurant {
         return name;
     }
 
-    public String getImageURL() {
+    public String getImageUrl() {
         return imageURL;
     }
 
-    public String getRating() {
+    public Double getRating() {
         return rating;
     }
 
@@ -38,7 +38,7 @@ public class Restaurant {
     public static class Builder {
         private String name;
         private String imageURL;
-        private String rating;
+        private Double rating;
         private String distance;
         private String price;
 
@@ -57,8 +57,8 @@ public class Restaurant {
             return this;
         }
 
-        public Builder withRating(String rating) {
-            this.rating = setBlankIfNull(rating);
+        public Builder withRating(Double rating) {
+            this.rating = rating;
             return this;
         }
 
