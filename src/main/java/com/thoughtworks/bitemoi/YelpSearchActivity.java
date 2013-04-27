@@ -8,9 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-
 import android.widget.ListView;
-import android.widget.TextView;
 import com.thoughtworks.bitemoi.adapters.BusinessListAdapter;
 import com.thoughtworks.bitemoi.models.Business;
 import com.thoughtworks.yelp.service.proxies.YelpProxy;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 
 public class YelpSearchActivity extends Activity {
 
-    private TextView mSearchResultsText;
 
     @Override
     public void onCreate(Bundle b){

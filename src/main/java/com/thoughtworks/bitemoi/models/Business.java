@@ -45,28 +45,33 @@ public class Business {
         public String Price;
 
         public Builder Name(String name) {
-            this.Name = (name == null) ? "" : name ;
+            this.Name = setBlankIfNull(name);
             return this;
         }
 
         public Builder ImageURL(String imageURL) {
-            this.ImageURL = (imageURL == null) ? "" : imageURL ;
+            this.ImageURL = setBlankIfNull(imageURL);
             return this;
         }
 
         public Builder Distance(String distance) {
-            this.Distance = (distance == null) ? "" : distance ;
+            this.Distance = setBlankIfNull(distance);
             return this;
         }
 
         public Builder Rating(String rating) {
-            this.Rating = (rating == null) ? "" : rating ;
+            this.Rating = setBlankIfNull(rating);
             return this;
         }
 
         public Builder Price(String price) {
-            this.Price = (price == null) ? "" : price ;
+            this.Price = setBlankIfNull(price);
             return this;
+        }
+
+
+        private String setBlankIfNull(String name) {
+            return (name == null) ? "" : name;
         }
 
         public Business build() {
