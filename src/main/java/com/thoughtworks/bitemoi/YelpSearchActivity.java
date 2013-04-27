@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.thoughtworks.yelp.service.proxies.YelpProxy;
@@ -14,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class YelpSearchActivity extends Activity {
@@ -45,11 +45,15 @@ public class YelpSearchActivity extends Activity {
         final String val = searchKey.getText().toString();
         searchResultsView = (ListView) findViewById(R.id.searchResult);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        final RestaurantListAdapter adapter = new RestaurantListAdapter(this, R.layout.restaurant);
         searchResultsView.setAdapter(adapter);
 
         setProgressBarIndeterminateVisibility(true);
         new AsyncTask<Void, Void, List<String>>() {
+            @Override protected void onPreExecute() {
+                adapter.clear();
+            }
+
             @Override
             protected List<String> doInBackground(Void... params) {
                 YelpProxy yelp = YelpProxy.getYelp(YelpSearchActivity.this);
@@ -63,11 +67,19 @@ public class YelpSearchActivity extends Activity {
 
             @Override
             protected void onPostExecute(List<String> result) {
-                adapter.addAll(result);
+                adapter.addAll(toRestaurants(result));
                 setProgressBarIndeterminateVisibility(false);
             }
         }.execute();
 
+    }
+
+    private List<Restaurant> toRestaurants(List<String> result) {
+        List<Restaurant> restaurants = new ArrayList<Restaurant>();
+        for(String name : result){
+            restaurants.add(new Restaurant(name));
+        }
+        return Collections.unmodifiableList(restaurants);
     }
 
 }

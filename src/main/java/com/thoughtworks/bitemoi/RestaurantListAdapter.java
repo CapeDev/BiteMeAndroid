@@ -1,20 +1,24 @@
 package com.thoughtworks.bitemoi;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantListAdapter extends BaseAdapter {
-    private int count;
     private final Context applicationContext;
+    private final int layout;
     private final List<Restaurant> restaurants;
 
-    public RestaurantListAdapter(Context applicationContext, List<Restaurant> restaurants) {
+    public RestaurantListAdapter(Context applicationContext, int layout) {
         this.applicationContext = applicationContext;
-        this.restaurants = restaurants;
+        this.layout = layout;
+        this.restaurants = new ArrayList<Restaurant>();
     }
 
     @Override
@@ -33,7 +37,30 @@ public class RestaurantListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+    public View getView(int i, View existing, ViewGroup viewGroup) {
+        View view = existing;
+
+        if (view == null) {
+            LayoutInflater vi;
+            vi = LayoutInflater.from(applicationContext);
+            view = vi.inflate(layout, null);
+        }
+
+        Restaurant restaurant = restaurants.get(i);
+
+        TextView nameView = (TextView)view.findViewById(R.id.name);
+        nameView.setText(restaurant.getName());
+
+        return view;
+    }
+
+    public void clear() {
+        restaurants.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Restaurant> result) {
+        restaurants.addAll(result);
+        notifyDataSetChanged();
     }
 }
