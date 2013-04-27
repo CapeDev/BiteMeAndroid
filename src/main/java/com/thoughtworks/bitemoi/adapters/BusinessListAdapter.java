@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import com.thoughtworks.bitemoi.Business;
 import com.thoughtworks.bitemoi.R;
+import com.thoughtworks.bitemoi.models.Business;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class BusinessListAdapter extends ArrayAdapter<Business> {
         protected TextView distance;
         protected TextView price;
         protected RatingBar rating;
+        protected WebView logo;
+
     }
 
     @Override
@@ -41,6 +44,7 @@ public class BusinessListAdapter extends ArrayAdapter<Business> {
             viewHolder.distance = (TextView) view.findViewById(R.id.distance);
             viewHolder.price = (TextView) view.findViewById(R.id.price);
             viewHolder.rating = (RatingBar) view.findViewById(R.id.ratingBar);
+            viewHolder.logo = (WebView) view.findViewById(R.id.logo);
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -51,6 +55,8 @@ public class BusinessListAdapter extends ArrayAdapter<Business> {
         holder.distance.setText(list.get(position).getDistance());
         holder.price.setText(list.get(position).getPrice());
         holder.rating.setNumStars((int) Double.parseDouble(list.get(position).getRating()));
+        String imageDocument = "<html><body><img style='width: 50px; height: 50px;' src='"+ list.get(position).getImageURL()+"'></body></html>";
+        holder.logo.loadData(imageDocument, "text/html", "UTF-8");
         return view;
     }
 }

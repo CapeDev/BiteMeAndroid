@@ -5,22 +5,33 @@
     android:layout_height="fill_parent"
     >
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal">
+
     <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Test"
-            android:id="@+id/search" android:layout_gravity="left|center_vertical"/>
+        android:id="@+id/search"
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:text="Taco" />
+
     <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/go_button"
-            android:id="@+id/button" android:layout_gravity="center|left" android:onClick="searchForRestaurant"/>
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="searchForRestaurant"
+        android:text="@string/go_button" />
+
+    </LinearLayout>
 
     <ListView
+	        android:id="@+id/searchResult"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="@string/results_indicator"
-            android:id="@+id/searchResult"/>
+            />
 
 
 </LinearLayout>

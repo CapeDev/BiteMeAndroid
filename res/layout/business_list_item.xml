@@ -5,10 +5,17 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+
+    <WebView android:id="@+id/logo"
+             android:layout_height="50dp"
+             android:layout_width="50dp">
+    </WebView>
+
     <LinearLayout
                   android:orientation="vertical"
-                  android:layout_width="230dp"
-                  android:layout_height="match_parent">
+                  android:layout_width="100dp"
+                  android:layout_height="match_parent"
+                  android:paddingLeft="10dp">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -20,9 +27,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/ratingBar" android:layout_gravity="center"
                 style="?android:attr/ratingBarStyleSmall" android:numStars="5"/>
-
-
     </LinearLayout>
+
 
     <LinearLayout
                   android:orientation="vertical"
