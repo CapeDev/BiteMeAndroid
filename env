@@ -1,0 +1,7 @@
+PROJECT_ROOT=$(/usr/bin/cd $(dirname $0) && pwd)
+
+VENDOR_DIRECTORY=$PROJECT_ROOT/vendor
+ANDROID_SDK_DIRECTORY=$VENDOR_DIRECTORY/android-sdk-macosx
+
+export ANDROID_HOME=$ANDROID_SDK_DIRECTORY
+export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH
