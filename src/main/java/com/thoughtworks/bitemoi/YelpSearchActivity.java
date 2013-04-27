@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.thoughtworks.bitemoi.adapters.RestaurantListAdapter;
@@ -62,11 +61,16 @@ public class YelpSearchActivity extends Activity {
 
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
 
-        final ArrayAdapter<Restaurant> adapter = new RestaurantListAdapter(this, restaurants);
+        final RestaurantListAdapter adapter = new RestaurantListAdapter(this, restaurants);
         searchResultsView.setAdapter(adapter);
 
         setProgressBarIndeterminateVisibility(true);
+        setProgressBarIndeterminateVisibility(true);
         new AsyncTask<Void, Void, List<Restaurant>>() {
+            @Override protected void onPreExecute() {
+                adapter.clear();
+            }
+
             @Override
             protected List<Restaurant> doInBackground(Void... params) {
                 YelpProxy yelp = YelpProxy.getYelp(YelpSearchActivity.this);
@@ -79,8 +83,8 @@ public class YelpSearchActivity extends Activity {
             }
 
             @Override
-            protected void onPostExecute(List<Restaurant> result) {
-                adapter.addAll(result);
+            protected void onPostExecute(List<Restaurant> restaurants) {
+                adapter.addAll(restaurants);
                 setProgressBarIndeterminateVisibility(false);
             }
         }.execute();

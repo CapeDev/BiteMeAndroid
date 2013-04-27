@@ -4,24 +4,31 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
 
-  <EditText
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:id="@+id/search"
-      android:layout_gravity="left|center_vertical"
-      android:inputType="text"/>
-
-  <Button
+  <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/go_button"
-      android:id="@+id/button"
-      android:layout_gravity="center|left"
-      android:onClick="searchForRestaurant"/>
+      android:layout_gravity="bottom|center_horizontal">
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="searchForRestaurant"
+        android:text="@string/go_button"/>
+
+  </LinearLayout>
 
   <ListView
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:text="@string/results_indicator"
       android:id="@+id/search_results"/>
+
 </LinearLayout>
