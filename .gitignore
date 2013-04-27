@@ -34,3 +34,5 @@ test_servers
 
 # SDK #
 vendor/android-sdk-macosx
+
+gen-external-apklibs/
