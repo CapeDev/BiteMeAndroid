@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import com.thoughtworks.bitemoi.Business;
+import com.thoughtworks.bitemoi.models.Business;
 import com.thoughtworks.bitemoi.R;
 
 import java.util.List;

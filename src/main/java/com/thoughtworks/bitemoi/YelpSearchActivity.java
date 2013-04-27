@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.thoughtworks.bitemoi.adapters.BusinessListAdapter;
+import com.thoughtworks.bitemoi.models.Business;
 import com.thoughtworks.yelp.service.proxies.YelpProxy;
 import org.json.JSONArray;
 import org.json.JSONException;
