@@ -16,7 +16,7 @@ public class YelpSearchActivityTest {
     public void testSearchForRestaurant() throws Exception {
         YelpSearchActivity yelpSearchActivity = new YelpSearchActivity();
         yelpSearchActivity.onCreate(null);
-        yelpSearchActivity.processJson("{\"businesses\": [{\"name\": \"taco track\"}]}");
+//        yelpSearchActivity.processJson("{\"businesses\": [{\"name\": \"taco track\"}]}");
 
         ListView resultListView = (ListView) yelpSearchActivity.findViewById(R.id.searchResult);
         assertEquals(resultListView.getAdapter().getCount(), 2);
