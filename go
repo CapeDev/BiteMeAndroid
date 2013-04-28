@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-[ -f ./setup-env ] && . ./setup-env
+[ -f ./env ] && . ./env
+
+git submodule init
+git submodule update
 
 emulator -avd emulator -prop persist.sys.language=en -prop persist.sys.country=US -noaudio -no-boot-anim &
 

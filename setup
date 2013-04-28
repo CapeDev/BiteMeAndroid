@@ -2,7 +2,10 @@
 
 set -e
 
-[ -f ./setup-env ] && . ./setup-env
+[ -f ./env ] && . ./env
+
+git submodule init
+git submodule update
 
 cd $PROJECT_ROOT
 
