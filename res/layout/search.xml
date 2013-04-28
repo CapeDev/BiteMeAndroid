@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
 
-    <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/search" android:layout_gravity="left|center_vertical"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/go_button"
-            android:id="@+id/button" android:layout_gravity="center|left" android:onClick="searchForRestaurant"/>
+  <EditText
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/search"
+      android:layout_gravity="left|center_vertical"
+      android:inputType="text"/>
 
-    <ListView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="@string/results_indicator"
-            android:id="@+id/searchResult"/>
+  <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/go_button"
+      android:id="@+id/button"
+      android:layout_gravity="center|left"
+      android:onClick="searchForRestaurant"/>
 
-
+  <ListView
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:text="@string/results_indicator"
+      android:id="@+id/search_results"/>
 </LinearLayout>

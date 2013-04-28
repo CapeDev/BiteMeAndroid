@@ -9,8 +9,8 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import com.thoughtworks.bitemoi.adapters.BusinessListAdapter;
-import com.thoughtworks.bitemoi.models.Business;
+import com.thoughtworks.bitemoi.adapters.RestaurantListAdapter;
+import com.thoughtworks.bitemoi.models.Restaurant;
 import com.thoughtworks.yelp.service.proxies.YelpProxy;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,74 +18,71 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
+import java.util.List;
 
 public class YelpSearchActivity extends Activity {
-
-
     @Override
-    public void onCreate(Bundle b){
+    public void onCreate(Bundle b) {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(b);
         setContentView(R.layout.search);
         setTitle("Food search");
     }
 
-    private ArrayList<Business> processJson(String jsonStuff) throws JSONException {
+    private ArrayList<Restaurant> processJson(String jsonStuff) throws JSONException {
         JSONObject json = new JSONObject(jsonStuff);
-        JSONArray businesses = json.getJSONArray("businesses");
-        ArrayList<Business> businesList = new ArrayList<Business>(businesses.length());
-        for (int i = 0; i < businesses.length(); i++) {
-            JSONObject business = businesses.getJSONObject(i);
+        JSONArray restaurantsJson = json.getJSONArray("businesses");
+        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>(restaurantsJson.length());
+        for (int i = 0; i < restaurantsJson.length(); i++) {
+            JSONObject restaurantJson = restaurantsJson.getJSONObject(i);
 
             double metersToMilesConversion = 0.00062137;
-            Double distance = Double.parseDouble(business.getString("distance")) * metersToMilesConversion;
+            Double distance = Double.parseDouble(restaurantJson.getString("distance")) * metersToMilesConversion;
             DecimalFormat roundedDistance = new DecimalFormat("#.##");
             String formattedDistance = roundedDistance.format(distance) + "mi";
-            Business newBusiness = new Business.Builder()
-                                                .Name(business.getString("name"))
-                                                .Distance(formattedDistance)
-                                                .ImageURL(business.getString("image_url"))
-                                                .Rating(business.getString("rating"))
-                                                .build();
-            Log.v("Json Array", business.toString());
-            businesList.add(newBusiness);
+            Restaurant restaurant = new Restaurant.Builder()
+                    .withName(restaurantJson.getString("name"))
+                    .withDistance(formattedDistance)
+                    .withImageURL(restaurantJson.getString("image_url"))
+                    .withRating(restaurantJson.getString("rating"))
+                    .build();
 
+            Log.v("Json Array", restaurantJson.toString());
+
+            restaurants.add(restaurant);
         }
 
-        return businesList;
+        return restaurants;
     }
 
-    public void searchForRestaurant(final View v)  {
-
-        EditText searchKey = (EditText)findViewById(R.id.search);
+    public void searchForRestaurant(final View view) {
+        EditText searchKey = (EditText) findViewById(R.id.search);
         final String val = searchKey.getText().toString();
-        final ListView view = (ListView) findViewById(R.id.searchResult);
+        final ListView searchResultsView = (ListView) findViewById(R.id.search_results);
 
-        ArrayList<Business> businesses = new ArrayList<Business>();
+        List<Restaurant> restaurants = new ArrayList<Restaurant>();
 
-        final ArrayAdapter<Business> adapter = new BusinessListAdapter(this, businesses);
-        view.setAdapter(adapter);
+        final ArrayAdapter<Restaurant> adapter = new RestaurantListAdapter(this, restaurants);
+        searchResultsView.setAdapter(adapter);
 
         setProgressBarIndeterminateVisibility(true);
-        new AsyncTask<Void, Void, ArrayList<Business>>() {
+        new AsyncTask<Void, Void, List<Restaurant>>() {
             @Override
-            protected ArrayList<Business> doInBackground(Void... params) {
+            protected List<Restaurant> doInBackground(Void... params) {
                 YelpProxy yelp = YelpProxy.getYelp(YelpSearchActivity.this);
                 String businesses = yelp.search(val, 37.788022, -122.399797);
                 try {
                     return processJson(businesses);
                 } catch (JSONException e) {
-                    return new ArrayList<Business>();
+                    return new ArrayList<Restaurant>();
                 }
             }
+
             @Override
-            protected void onPostExecute(ArrayList<Business> result) {
+            protected void onPostExecute(List<Restaurant> result) {
                 adapter.addAll(result);
                 setProgressBarIndeterminateVisibility(false);
             }
         }.execute();
-
     }
-
 }

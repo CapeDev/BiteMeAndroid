@@ -10,7 +10,6 @@ import static junit.framework.Assert.assertEquals;
 
 @RunWith(RobolectricTestRunner.class)
 public class YelpSearchActivityTest {
-
     @Test
     @Ignore
     public void testSearchForRestaurant() throws Exception {
@@ -18,9 +17,8 @@ public class YelpSearchActivityTest {
         yelpSearchActivity.onCreate(null);
 //        yelpSearchActivity.processJson("{\"businesses\": [{\"name\": \"taco track\"}]}");
 
-        ListView resultListView = (ListView) yelpSearchActivity.findViewById(R.id.searchResult);
+        ListView resultListView = (ListView) yelpSearchActivity.findViewById(R.id.search_results);
         assertEquals(resultListView.getAdapter().getCount(), 2);
 
     }
-
 }
