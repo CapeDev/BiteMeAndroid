@@ -53,7 +53,7 @@ public class Restaurant {
         }
 
         public Builder withDistance(String distance) {
-            this.distance = setBlankIfNull(distance);
+            this.distance = distance;
             return this;
         }
 

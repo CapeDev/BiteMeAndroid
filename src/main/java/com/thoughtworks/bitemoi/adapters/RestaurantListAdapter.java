@@ -11,34 +11,33 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import com.google.inject.Inject;
 import com.thoughtworks.bitemoi.R;
 import com.thoughtworks.bitemoi.models.Restaurant;
 import com.thoughtworks.bitemoi.utilities.BinaryProcedure;
 
 import java.io.InputStream;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
     private final Context context;
-    private final List<Restaurant> restaurants;
-    private final ImageRegistry imageRegistry;
+    private final ImageRegistry imageRegistry = new ImageRegistry();
     private final ConcurrentMap<ImageView, String> uriCache = new ConcurrentHashMap<ImageView, String>();
 
-    public RestaurantListAdapter(Context context, List<Restaurant> restaurants) {
-        super(context, R.layout.restaurant_result, restaurants);
+    @Inject
+    public RestaurantListAdapter(Context context) {
+        super(context, R.layout.restaurant_result, new ArrayList<Restaurant>());
         this.context = context;
-        this.restaurants = restaurants;
-        this.imageRegistry = new ImageRegistry();
     }
 
     @Override
     public View getView(int position, View existingView, ViewGroup existingViewGroup) {
         final View view = existingView == null ? inflateView() : existingView;
         final ViewHolder holder = (ViewHolder) view.getTag();
-        final Restaurant restaurant = restaurants.get(position);
+        final Restaurant restaurant = super.getItem(position);
 
         holder.name.setText(restaurant.getName());
         holder.distance.setText(restaurant.getDistance());
@@ -57,17 +56,17 @@ public class RestaurantListAdapter extends ArrayAdapter<Restaurant> {
         return view;
     }
 
-    public void addAll(List<Restaurant> result) {
+    public void addAll(Iterable<Restaurant> result) {
         for (Restaurant restaurant : result) {
             imageRegistry.prime(restaurant.getImageUrl());
-            restaurants.add(restaurant);
+            super.add(restaurant);
         }
         notifyDataSetChanged();
     }
 
     @Override
     public void clear() {
-        restaurants.clear();
+        super.clear();
         notifyDataSetChanged();
     }
 

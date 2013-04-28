@@ -1,7 +1,10 @@
 package com.thoughtworks.bitemoi.adapters;
 
 
-import com.thoughtworks.bitemoi.YelpSearchActivity;
+import android.widget.EditText;
+import android.widget.ListView;
+import com.thoughtworks.bitemoi.activities.SearchActivity;
+import com.thoughtworks.bitemoi.gateways.search.SearchGateway;
 import com.thoughtworks.bitemoi.models.Restaurant;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Assert;
@@ -9,33 +12,35 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
+import static java.util.Arrays.asList;
+import static org.mockito.Mockito.mock;
 
 @RunWith(RobolectricTestRunner.class)
 public class RestaurantListAdapterTest {
     @Test
     @Ignore
     public void testGetCount() throws Exception {
-        YelpSearchActivity activity = new YelpSearchActivity();
-        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
-        restaurants.add(new Restaurant.Builder()
-                                   .withName("Soup Company")
-                                   .withDistance(null)
-                                   .withImageURL(null)
-                                   .withRating(null)
-                                   .build());
+        EditText searchBox = mock(EditText.class);
+        ListView searchResults = mock(ListView.class);
+        SearchGateway searchGateway = mock(SearchGateway.class);
 
-        restaurants.add(new Restaurant.Builder()
-                                   .withName("Cafe Venue")
-                                   .withDistance(null)
-                                   .withImageURL(null)
-                                   .withRating(null)
-                                   .build());
+        SearchActivity activity = new SearchActivity(searchBox, searchResults, searchGateway);
+        Restaurant restaurant1 = new Restaurant.Builder()
+                .withName("Soup Company")
+                .withDistance(null)
+                .withImageURL(null)
+                .withRating(null)
+                .build();
+        Restaurant restaurant2 = new Restaurant.Builder()
+                .withName("Cafe Venue")
+                .withDistance(null)
+                .withImageURL(null)
+                .withRating(null)
+                .build();
 
-
-        RestaurantListAdapter adapter = new RestaurantListAdapter(activity, restaurants);
+        RestaurantListAdapter adapter = new RestaurantListAdapter(activity);
+        adapter.addAll((Iterable<Restaurant>) asList(restaurant1, restaurant2));
 
         Assert.assertEquals(adapter.getCount(), 2);
-
     }
 }

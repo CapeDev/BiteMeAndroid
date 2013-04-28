@@ -1,11 +1,12 @@
-package com.thoughtworks.bitemoi;
+package com.thoughtworks.bitemoi.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import com.thoughtworks.bitemoi.R;
+import roboguice.activity.RoboActivity;
 
-public class HelloAndroidActivity extends Activity {
+public class HomeActivity extends RoboActivity {
 
 //    private static String TAG = "bitemoi";
 
@@ -28,7 +29,7 @@ public class HelloAndroidActivity extends Activity {
     }
 
     public void yelpSearch(View view) {
-        Intent intent = new Intent(this, YelpSearchActivity.class);
+        Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
     }
 }

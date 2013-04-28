@@ -1,9 +1,9 @@
-package com.thoughtworks.yelp.service.proxies;
+package com.thoughtworks.bitemoi.gateways.search.authentication;
 
 import org.scribe.builder.api.DefaultApi10a;
 import org.scribe.model.Token;
 
-public class YelpApiService extends DefaultApi10a {
+public class YelpOAuthApi extends DefaultApi10a {
     @Override
     public String getRequestTokenEndpoint() {
         return null;
