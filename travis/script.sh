@@ -12,5 +12,5 @@ mvn install
 adb kill-server
 adb start-server
 adb devices
-adb install -r target/bitemoi-1.0.apk
-calabash-android run target/bitemoi-1.0.apk
+adb install -r target/trakemoi-1.0.apk
+calabash-android run target/trakemoi-1.0.apk
