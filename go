@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-[ -f ./env ] && . ./env
+[ -f ./.env ] && . ./.env
 
 git submodule init
 git submodule update

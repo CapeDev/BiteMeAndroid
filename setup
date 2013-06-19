@@ -2,7 +2,7 @@
 
 set -e
 
-[ -f ./env ] && . ./env
+[ -f ./.env ] && . ./.env
 
 git submodule init
 git submodule update
