@@ -1,7 +1,7 @@
 BiteMeAndroid
 =============
 
-The BiteMe android app
+The TrakéMe android app
 
 Getting started
 =======
@@ -31,7 +31,7 @@ Running calabash tets:
 Make sure emulator is running.
 And then run:
 ```
-calabash-android run target/bitemoi-1.0.apk
+calabash-android run target/trakemoi-1.0.apk
 ```
 
 

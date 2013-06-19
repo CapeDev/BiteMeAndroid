@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="hello">Hello bitemoi!</string>
-  <string name="app_name">bitemoi</string>
+  <string name="hello">Welcome to TrakéMoi!</string>
+  <string name="app_name">TrakéMoi</string>
   <string name="location">Location</string>
   <string name="foodSearch">Search</string>
   <string name="consumer.key">A-FsSCcVrjEun0lup_SXAA</string>
