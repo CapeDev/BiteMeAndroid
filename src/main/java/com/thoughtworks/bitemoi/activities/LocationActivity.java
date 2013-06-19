@@ -3,14 +3,10 @@ package com.thoughtworks.bitemoi.activities;
 import android.os.Bundle;
 import android.view.Menu;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.thoughtworks.bitemoi.R;
 import roboguice.activity.RoboActivity;
-
-//import com.google.android.gms.maps.GoogleMap;
-//import com.google.android.gms.maps.UiSettings;
-//import com.google.android.gms.maps.GoogleMap;
-//import com.google.android.gms.maps.UiSettings;
 
 public class LocationActivity extends RoboActivity {
 
@@ -27,24 +23,24 @@ public class LocationActivity extends RoboActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.location);
-//        setUpMapIfNeeded();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.location);
+        setUpMapIfNeeded();
     }
 
     private void setUpMapIfNeeded() {
-//        if (map == null) {
-//            map = ((MapFragment) getFragmentManager()
-//                    .findFragmentById(R.id.map)).getMap();
-//            if (map != null) {
-//                setUpMap();
-//            }
-//        }
+        if (map == null) {
+            map = ((MapFragment) getFragmentManager()
+                    .findFragmentById(R.id.map)).getMap();
+            if (map != null) {
+                setUpMap();
+            }
+        }
     }
 
     private void setUpMap() {
-//        uiSettings = map.getUiSettings();
-//        map.setMyLocationEnabled(true);
+        uiSettings = map.getUiSettings();
+        map.setMyLocationEnabled(true);
     }
 
     @Override
