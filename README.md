@@ -12,11 +12,15 @@ git submodule update --init --recursive
 mvn install
 ```
 
-
 You need Google Play Service installed in order to provide google map service
 ```
 adb install com.android.vending-1.apk
 adb install com.google.android.gms-3025110-v3.0.25\ \(583950-10\).apk
+
+**updated** (for google play service rev7)
+
+adb install com.google.vending.apk
+adb install com.google.android.gms.apk
 ```
 
 Calabash Tests:
