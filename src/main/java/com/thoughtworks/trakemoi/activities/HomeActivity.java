@@ -8,8 +8,6 @@ import roboguice.activity.RoboActivity;
 
 public class HomeActivity extends RoboActivity {
 
-//    private static String TAG = "bitemoi";
-
     /**
      * Called when the activity is first created.
      *
