@@ -1,7 +1,9 @@
-BiteMeAndroid
+TrakéMeAndroid
 =============
 
 The TrakéMe android app
+
+![Build](https://api.travis-ci.org/CapeDev/TrakeMoi.png)
 
 Getting started
 =======
