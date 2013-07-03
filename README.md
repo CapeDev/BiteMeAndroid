@@ -3,7 +3,8 @@ TrakéMeAndroid
 
 The TrakéMe android app
 
-[![Build](https://api.travis-ci.org/CapeDev/TrakeMoi.png)](https://travis-ci.org/CapeDev/TrakeMoi)
+<p><a href="https://travis-ci.org/CapeDev/TrakeMoi">
+<img border="0" src="https://api.travis-ci.org/CapeDev/TrakeMoi.png"></a></p>
 
 Getting started
 =======
