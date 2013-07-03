@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="hello">Welcome to TrakéMoi!</string>
-  <string name="app_name">TrakéMoi</string>
-  <string name="location">Location</string>
-  <string name="foodSearch">Search</string>
   <string name="consumer.key">A-FsSCcVrjEun0lup_SXAA</string>
   <string name="consumer.secret">26ssCG7D2PHDmBRloRICDFxyx9M</string>
   <string name="token.key">Yfh3RFacDZEBRR6S-pfFi_pcWdQ5s7JV</string>
   <string name="token.secret">YkS9xm4cuhBwHFZM4i-HfbXgn14</string>
+
+  <string name="hello">Welcome to TrakéMoi!</string>
+  <string name="app_name">TrakéMoi</string>
+  <string name="location">Location</string>
+  <string name="punchList">Punch List</string>
   <string name="go_button">GO</string>
   <string name="search_box">search</string>
-  <string name="results_indicator">results ...</string>
+  <string name="results_indicator">Records...</string>
   <string name="menu_settings">Settings</string>
   <string name="restaurant_search_image_description">Restaurant Logo</string>
+    <string name="summary">Entry Records</string>
 </resources>

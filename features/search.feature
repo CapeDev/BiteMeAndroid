@@ -1,3 +1,4 @@
+@wip
 Feature: Search for a restaurant based on food
 
   Scenario: Search for a restaurant
