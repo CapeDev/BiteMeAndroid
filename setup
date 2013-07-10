@@ -7,6 +7,8 @@ set -e
 git submodule init
 git submodule update
 
+git submodule foreach git pull origin master
+
 cd $PROJECT_ROOT
 
 wget http://dl.google.com/android/$ANDROID_SDK_ARTIFACT
