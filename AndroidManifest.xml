@@ -37,6 +37,8 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <activity android:name="com.thoughtworks.trakemoi.activities.RecordsSummaryActivity"/>
+    <activity android:name="com.thoughtworks.trakemoi.activities.PunchListActivity"/>
     <activity android:name="com.thoughtworks.trakemoi.activities.LocationActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.SearchActivity" />
 
