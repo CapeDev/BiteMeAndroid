@@ -40,6 +40,3 @@ And then run:
 ```
 calabash-android run target/trakemoi-1.0.apk
 ```
-
-
-
