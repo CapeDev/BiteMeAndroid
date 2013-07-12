@@ -10,6 +10,7 @@ tar -xzf android-sdk_r21.0.1-linux.tgz
 export ANDROID_HOME=$PROJECT_ROOT/android-sdk-linux
 export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 android update sdk --no-ui --force --filter platform-tools,extra-android-support,android-17,sysimg-17,extra-google-google_play_services
+android update sdk --no-ui --force --filter android-16
 git submodule foreach git pull origin master
 cp vendor/gms-mvn/gms-mvn-install.sh android-sdk-linux/extras/google/google_play_services/libproject/google-play-services_lib/ 
 (cd android-sdk-linux/extras/google/google_play_services/libproject/google-play-services_lib/ && ./gms-mvn-install.sh 7)
