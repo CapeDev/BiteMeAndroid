@@ -40,3 +40,8 @@ And then run:
 ```
 calabash-android run target/trakemoi-1.0.apk
 ```
+
+More information:
+==============
+Google Play Service 7
+
