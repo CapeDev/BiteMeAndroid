@@ -3,32 +3,45 @@ package com.thoughtworks.trakemoi.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
 import com.thoughtworks.trakemoi.R;
 import com.google.android.gms.location.LocationClient;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 
-    public class LocationActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class LocationActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     private GoogleMap map;
     private UiSettings uiSettings;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private Circle zone = null;
+    private LatLng latLng = null;
     public static final String TAG = "Trakemoi";
     private LocationClient locationClient;
+    final Context context = this;
+
 
     /**
      * Called when the activity is first created.
@@ -52,6 +65,7 @@ import com.google.android.gms.location.LocationClient;
                     .findFragmentById(R.id.map)).getMap();
             map.setOnMapClickListener(this);
             map.setMyLocationEnabled(true);
+            Toast.makeText(this, "new map", Toast.LENGTH_SHORT).show();
 
             if (map != null) {
                 setUpMap();
@@ -131,7 +145,55 @@ import com.google.android.gms.location.LocationClient;
 
     @Override
     public void onMapClick(LatLng latLng) {
-        map.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
+        if(zone == null) {
+            final LatLng location = latLng;
+            LayoutInflater li = LayoutInflater.from(context);
+            View promptsView = li.inflate(R.layout.prompt, null);
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                    context);
+
+            alertDialogBuilder.setView(promptsView);
+
+            final EditText userInput = (EditText) promptsView
+                    .findViewById(R.id.editTextDialogUserInput);
+
+            alertDialogBuilder
+                    .setCancelable(false)
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    zone = map.addCircle(getCircleOptions(location));
+                                    Toast.makeText(context, "Your zone was created at (" + location.latitude + ", " + location.longitude + ")" , Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    deleteZone();
+                                    dialog.cancel();
+                                }
+                            });
+
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+        }
+    }
+
+    private void deleteZone(){
+        zone.remove();
+    }
+
+    public CircleOptions getCircleOptions(LatLng latLng) {
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(latLng);
+        circleOptions.radius(250);
+        circleOptions.fillColor(Color.argb(50, 51, 153, 255));
+        circleOptions.strokeColor(Color.argb(150, 51, 153, 255));
+        circleOptions.strokeWidth(3.0f);
+        return circleOptions;
     }
 
     public static class ErrorDialogFragment extends DialogFragment {
