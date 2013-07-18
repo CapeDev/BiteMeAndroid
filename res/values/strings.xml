@@ -4,7 +4,7 @@
   <string name="consumer.secret">26ssCG7D2PHDmBRloRICDFxyx9M</string>
   <string name="token.key">Yfh3RFacDZEBRR6S-pfFi_pcWdQ5s7JV</string>
   <string name="token.secret">YkS9xm4cuhBwHFZM4i-HfbXgn14</string>
-
+  <string name="create">Create</string>
   <string name="hello">Welcome to TrakéMoi!</string>
   <string name="app_name">TrakéMoi</string>
   <string name="location">Location</string>

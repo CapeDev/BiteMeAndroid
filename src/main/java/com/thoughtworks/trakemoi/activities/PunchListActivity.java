@@ -1,8 +1,10 @@
 package com.thoughtworks.trakemoi.activities;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
@@ -32,9 +34,11 @@ public class PunchListActivity extends RoboActivity {
     @Override
     public void onCreate(Bundle b) {
         super.onCreate(b);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setTitle("Punch List");
         setContentView(R.layout.punch_list);
+        setUpActionBar();
 
         final StatusListAdapter adapter = new StatusListAdapter(this);
         punchList.setAdapter(adapter);
@@ -67,4 +71,22 @@ public class PunchListActivity extends RoboActivity {
         }.execute();
 
     }
+
+    private void setUpActionBar() {
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

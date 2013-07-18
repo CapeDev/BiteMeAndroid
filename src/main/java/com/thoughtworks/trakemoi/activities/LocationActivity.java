@@ -2,6 +2,7 @@ package com.thoughtworks.trakemoi.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -10,8 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
+import android.view.*;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,9 +53,17 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        setTitle("Create Zone");
         setContentView(R.layout.location);
+        setUpActionBar();
         locationClient = new LocationClient(this, this, this);
         setUpMapIfNeeded();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void setUpMapIfNeeded() {
@@ -78,9 +85,17 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
         map.setMyLocationEnabled(true);
     }
 
+    private void setUpActionBar() {
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.location, menu);
+        getMenuInflater().inflate(R.menu.map_action_bar, menu);
         return true;
     }
 
@@ -264,4 +279,19 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
         locationClient.disconnect();
         super.onStop();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void create(MenuItem unused) {
+        Toast.makeText(this, "I just clicked the add button!", Toast.LENGTH_LONG).show();
+    }
+
 }
