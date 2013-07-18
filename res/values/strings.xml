@@ -4,10 +4,10 @@
   <string name="consumer.secret">26ssCG7D2PHDmBRloRICDFxyx9M</string>
   <string name="token.key">Yfh3RFacDZEBRR6S-pfFi_pcWdQ5s7JV</string>
   <string name="token.secret">YkS9xm4cuhBwHFZM4i-HfbXgn14</string>
-  <string name="create">Create</string>
+  <string name="create">Create Zone</string>
   <string name="hello">Welcome to TrakéMoi!</string>
   <string name="app_name">TrakéMoi</string>
-  <string name="location">Location</string>
+  <string name="location">Set Location</string>
   <string name="punchList">Punch List</string>
   <string name="go_button">GO</string>
   <string name="search_box">search</string>
@@ -20,4 +20,9 @@
   <string name="unknown_activity_request_code">
         Received an unknown activity request code %1$d in onActivityResult.
   </string>
+  <string name="zone_name_label">Name</string>
+    <string name="zone_desc_label">Description</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="radius">Radius</string>
 </resources>

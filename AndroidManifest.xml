@@ -41,8 +41,9 @@
     <activity android:name="com.thoughtworks.trakemoi.activities.PunchListActivity"/>
     <activity android:name="com.thoughtworks.trakemoi.activities.LocationActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.SearchActivity" />
+    <activity android:name="com.thoughtworks.trakemoi.activities.CreateZoneActivity" />
 
-    <meta-data
+      <meta-data
         android:name="com.google.android.maps.v2.API_KEY"
         android:value="AIzaSyAEh4v2ZU1tUgvAKilZdrVVL-qOHpZtjt8"/>
 

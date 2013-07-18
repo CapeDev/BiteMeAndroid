@@ -54,7 +54,7 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setTitle("Create Zone");
+        setTitle("Set Location");
         setContentView(R.layout.location);
         setUpActionBar();
         locationClient = new LocationClient(this, this, this);
@@ -95,7 +95,6 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.location, menu);
-        getMenuInflater().inflate(R.menu.map_action_bar, menu);
         return true;
     }
 
@@ -160,41 +159,11 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if(zone == null) {
-            final LatLng location = latLng;
-            LayoutInflater li = LayoutInflater.from(context);
-            View promptsView = li.inflate(R.layout.prompt, null);
-
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                    context);
-
-            alertDialogBuilder.setView(promptsView);
-
-            final EditText userInput = (EditText) promptsView
-                    .findViewById(R.id.editTextDialogUserInput);
-
-            alertDialogBuilder
-                    .setCancelable(false)
-                    .setPositiveButton("OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
-                                    zone = map.addCircle(getCircleOptions(location));
-                                    Toast.makeText(context, "Your zone was created at (" + location.latitude + ", " + location.longitude + ")" , Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                    .setNegativeButton("Cancel",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
-                                    deleteZone();
-                                    dialog.cancel();
-                                }
-                            });
-
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-
+        if(zone != null) {
+            deleteZone();
         }
+        zone = map.addCircle(getCircleOptions(latLng));
+        Toast.makeText(context, "Your zone was created at (" + latLng.latitude + ", " + latLng.longitude + ")" , Toast.LENGTH_SHORT).show();
     }
 
     private void deleteZone(){
@@ -288,10 +257,6 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void create(MenuItem unused) {
-        Toast.makeText(this, "I just clicked the add button!", Toast.LENGTH_LONG).show();
     }
 
 }

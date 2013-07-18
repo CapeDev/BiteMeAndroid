@@ -21,22 +21,15 @@ public class HomeActivity extends RoboActivity {
         setContentView(R.layout.main);
     }
 
-    public void locationService(View view) {
-        Intent locationIntent = new Intent(view.getContext(), LocationActivity.class);
-        startActivityForResult(locationIntent, 0);
+    public void createZone(View view) {
+        Intent createZoneIntent = new Intent(view.getContext(), CreateZoneActivity.class);
+        startActivityForResult(createZoneIntent, 0);
     }
-
-//    Hiding restaurant list view and search function
-//    public void yelpSearch(View view) {
-//        Intent intent = new Intent(this, SearchActivity.class);
-//        startActivity(intent);
-//    }
 
     public void punchList(View view) {
         Intent punchListIntent = new Intent(this, PunchListActivity.class);
         startActivity(punchListIntent);
     }
-
 
     public void recordsSummary(View view) {
         Intent punchListIntent = new Intent(this, RecordsSummaryActivity.class);

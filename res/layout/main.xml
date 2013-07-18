@@ -10,11 +10,10 @@
             android:text="@string/hello"/>
 
     <Button
-            android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/location"
-            android:onClick="locationService"/>
+            android:text="@string/create"
+            android:onClick="createZone"/>
 
     <Button
             android:layout_width="match_parent"

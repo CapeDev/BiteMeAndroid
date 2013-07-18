@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" >
+
+    <EditText android:id="@+id/zone_name_input"
+              android:layout_width="fill_parent"
+              android:layout_height="@dimen/edit_text_height"
+              android:hint="@string/zone_name_label"/>
+
+    <EditText android:id="@+id/zone_desc_input"
+              android:layout_width="fill_parent"
+              android:layout_height="@dimen/edit_text_height"
+              android:layout_below="@+id/zone_name_input"
+              android:hint="@string/zone_desc_label"/>
+
+    <EditText
+            android:id="@+id/latitude_input"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:hint="@string/latitude"
+            android:layout_below="@+id/zone_desc_input"/>
+
+    <EditText
+            android:id="@+id/longitude_input"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:hint="@string/longitude"
+            android:layout_below="@+id/latitude_input"/>
+
+    <EditText
+            android:id="@+id/radius_input"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/edit_text_height"
+            android:hint="@string/radius"
+            android:layout_below="@+id/longitude_input"/>
+
+    <Button
+            android:layout_width="120dp"
+            android:layout_height="@dimen/edit_text_height"
+            android:text="@string/location"
+            android:onClick="selectLocation"
+            android:layout_below="@+id/radius_input"
+            android:layout_alignParentLeft="true"/>
+
+</RelativeLayout>
