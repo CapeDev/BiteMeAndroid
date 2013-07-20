@@ -37,7 +37,6 @@ public class HomeActivity extends RoboActivity {
         startActivity(punchListIntent);
     }
 
-
     public void recordsSummary(View view) {
         Intent punchListIntent = new Intent(this, RecordsSummaryActivity.class);
         startActivity(punchListIntent);

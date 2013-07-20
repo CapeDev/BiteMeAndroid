@@ -2,6 +2,8 @@ package com.thoughtworks.trakemoi.models;
 
 public class PunchStatus {
 
+    private Long id;
+
     private String status;
     private String date;
     private String time;
@@ -10,6 +12,15 @@ public class PunchStatus {
         this.status = statusBuilder.status;
         this.date = statusBuilder.date;
         this.time = statusBuilder.time;
+        this.id = statusBuilder.id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStatus() {
@@ -37,6 +48,7 @@ public class PunchStatus {
     }
 
     public static class StatusBuilder{
+        private Long id = -1L;
         private String status;
         private String date;
         private String time;
@@ -47,6 +59,11 @@ public class PunchStatus {
 
         public StatusBuilder(String status){
             this.status = setBlankIfNull(status);
+        }
+
+        public StatusBuilder withId(Long id){
+            this.id = id;
+            return this;
         }
 
         public StatusBuilder withDate(String date){

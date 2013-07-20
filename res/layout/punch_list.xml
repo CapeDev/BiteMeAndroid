@@ -10,7 +10,12 @@
             android:text="Punch Punch!"
             android:id="@+id/textView"
             android:layout_gravity="center"/>
-
+    <Button
+            android:id="@+id/inOrOutBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/inPunch"
+            />
     <ListView
             android:id="@+id/punchListView"
             android:layout_width="fill_parent"
