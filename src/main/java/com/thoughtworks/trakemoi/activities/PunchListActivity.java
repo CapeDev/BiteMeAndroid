@@ -122,7 +122,7 @@ public class PunchListActivity extends RoboActivity {
 
         Date date = new Date();
         CharSequence dataString = DateFormat.format("EEEE, MMMM d, yyyy ", date.getTime());
-        CharSequence timeString = DateFormat.format("hh:mm:ss", date.getTime());
+        CharSequence timeString = DateFormat.format("kk:mm:ss", date.getTime());
 
         punchDatabase.addPunchStatus(new PunchStatus.StatusBuilder(punchStatus)
                 .withTime(timeString.toString())
