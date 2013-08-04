@@ -21,21 +21,15 @@ import com.google.android.gms.maps.model.*;
 import com.thoughtworks.trakemoi.R;
 import com.google.android.gms.location.LocationClient;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 
-public class LocationActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class LocationActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     private GoogleMap map;
     private UiSettings uiSettings;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private Circle zone = null;
+    private Marker marker = null;
     private LatLng latLng = null;
     public static final String TAG = "Trakemoi";
     private LocationClient locationClient;
@@ -71,6 +65,7 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
             map = ((SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map)).getMap();
             map.setOnMapClickListener(this);
+            map.setOnMarkerDragListener(this);
             map.setMyLocationEnabled(true);
             Toast.makeText(this, "new map", Toast.LENGTH_SHORT).show();
 
@@ -94,7 +89,7 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.location, menu);
+        getMenuInflater().inflate(R.menu.location_action_bar, menu);
         return true;
     }
 
@@ -162,22 +157,49 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
         if(zone != null) {
             deleteZone();
         }
+        if(marker != null) {
+            deleteMarker();
+        }
+        Bundle bundle = getIntent().getExtras();
+        String zoneName = bundle.getString("zoneName");
+        marker = map.addMarker(new MarkerOptions().position(latLng).title(zoneName).draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.building)));
         zone = map.addCircle(getCircleOptions(latLng));
-        Toast.makeText(context, "Your zone was created at (" + latLng.latitude + ", " + latLng.longitude + ")" , Toast.LENGTH_SHORT).show();
     }
 
     private void deleteZone(){
         zone.remove();
     }
 
+    private void deleteMarker(){
+        marker.remove();
+    }
+
     public CircleOptions getCircleOptions(LatLng latLng) {
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.center(latLng);
         circleOptions.radius(250);
-        circleOptions.fillColor(Color.argb(50, 51, 153, 255));
-        circleOptions.strokeColor(Color.argb(150, 51, 153, 255));
+        circleOptions.fillColor(Color.argb(25, 139, 0, 255));
+        circleOptions.strokeColor(Color.argb(150, 139, 0, 255));
         circleOptions.strokeWidth(3.0f);
         return circleOptions;
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+        deleteZone();
+        zone = map.addCircle(getCircleOptions(marker.getPosition()));
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+        deleteZone();
+        zone = map.addCircle(getCircleOptions(marker.getPosition()));
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        deleteZone();
+        zone = map.addCircle(getCircleOptions(marker.getPosition()));
     }
 
     public static class ErrorDialogFragment extends DialogFragment {
@@ -257,6 +279,10 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void save(MenuItem unused) {
+        Toast.makeText(this, "I just clicked the save button!", Toast.LENGTH_LONG).show();
     }
 
 }

@@ -28,7 +28,7 @@
   <application
       android:name=".TrakeMoiApplication"
       android:allowBackup="true"
-      android:icon="@drawable/ic_launcher"
+      android:icon="@drawable/trakemoi2"
       android:label="@string/app_name"
       >
     <activity android:name="com.thoughtworks.trakemoi.activities.HomeActivity">
