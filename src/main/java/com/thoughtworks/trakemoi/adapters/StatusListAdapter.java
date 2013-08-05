@@ -66,9 +66,4 @@ public class StatusListAdapter extends ArrayAdapter<PunchStatus> {
         }
     }
 
-    private class ItemViewCache {
-        public TextView status;
-        public TextView date;
-        public TextView time;
-    }
 }

@@ -26,4 +26,5 @@
     <string name="radius">Radius</string>
     <string name="inPunch">In</string>
     <string name="outPunch">Out</string>
+    <string name="zones">My Zones</string>
 </resources>

@@ -9,7 +9,8 @@
     <EditText android:id="@+id/zone_name_input"
               android:layout_width="fill_parent"
               android:layout_height="@dimen/edit_text_height"
-              android:hint="@string/zone_name_label"/>
+              android:hint="@string/zone_name_label">
+    </EditText>
 
     <EditText android:id="@+id/zone_desc_input"
               android:layout_width="fill_parent"

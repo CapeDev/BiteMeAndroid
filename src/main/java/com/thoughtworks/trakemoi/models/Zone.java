@@ -41,11 +41,17 @@ public class Zone {
     }
 
     public static class Builder {
+        private Long id;
         private String name;
         private String desc;
         private int radius;
         private double latitude;
         private double longitude;
+
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder withName(String name) {
             this.name = setBlankIfNull(name);

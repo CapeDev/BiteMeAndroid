@@ -36,4 +36,9 @@ public class HomeActivity extends RoboActivity {
         startActivity(punchListIntent);
     }
 
+    public void myZones(View view) {
+        Intent zoneListIntent = new Intent(this, ZoneListActivity.class);
+        startActivity(zoneListIntent);
+    }
+
 }

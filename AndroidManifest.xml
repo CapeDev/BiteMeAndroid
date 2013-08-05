@@ -42,6 +42,8 @@
     <activity android:name="com.thoughtworks.trakemoi.activities.LocationActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.SearchActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.CreateZoneActivity" />
+    <activity android:name="com.thoughtworks.trakemoi.activities.ZoneListActivity" />
+
 
       <meta-data
         android:name="com.google.android.maps.v2.API_KEY"

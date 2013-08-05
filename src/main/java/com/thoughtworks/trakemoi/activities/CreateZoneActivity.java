@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import com.thoughtworks.trakemoi.R;
@@ -30,6 +31,8 @@ public class CreateZoneActivity extends TrakemoiActivity {
         setContentView(R.layout.create_zone);
         setUpActionBar();
         zoneName.addTextChangedListener(new ZoneWatcher());
+        InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(zoneName, InputMethodManager.SHOW_IMPLICIT);
         zoneDesc.addTextChangedListener(new ZoneWatcher());
     }
 
