@@ -1,7 +1,6 @@
 package com.thoughtworks.trakemoi.data;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PunchDataAccess {
+
     private SQLiteDatabase database;
     private SQLiteOpenHelper sqLiteOpenHelper;
     private String tableName = TrakeMoiDatabase.PUNCH_TABLE;
-
 
     public PunchDataAccess(SQLiteOpenHelper sqLiteOpenHelper) {
          this.sqLiteOpenHelper = sqLiteOpenHelper;
@@ -54,7 +53,6 @@ public class PunchDataAccess {
     }
 
     public long addPunchStatus(PunchStatus punch) {
-        Cursor cursor = null;
         database = sqLiteOpenHelper.getWritableDatabase();
 
         ContentValues punchStatus = new ContentValues();

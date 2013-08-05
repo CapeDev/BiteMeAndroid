@@ -6,6 +6,7 @@ import com.thoughtworks.trakemoi.R;
 import com.thoughtworks.trakemoi.gateways.search.SearchGateway;
 
 public class SearchGatewayModule extends AbstractModule {
+
     private final Context context;
 
     public SearchGatewayModule(Context context) {

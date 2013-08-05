@@ -1,15 +1,16 @@
 package com.thoughtworks.trakemoi.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ActionBar;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
@@ -21,20 +22,32 @@ import com.google.android.gms.maps.model.*;
 import com.thoughtworks.trakemoi.R;
 import com.google.android.gms.location.LocationClient;
 
-import android.content.Context;
+import com.thoughtworks.trakemoi.data.DataAccessFactory;
+import com.thoughtworks.trakemoi.data.ZoneDataAccess;
+import com.thoughtworks.trakemoi.dialog.SaveZoneDialogFragment;
+import com.thoughtworks.trakemoi.models.Zone;
+import roboguice.activity.RoboFragmentActivity;
 
-public class LocationActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+import javax.inject.Inject;
+
+public class LocationActivity extends RoboFragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+
+    public static final String TAG = "Trakemoi";
 
     private GoogleMap map;
-    private UiSettings uiSettings;
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    private Circle zone = null;
+    private Circle circle = null;
     private Marker marker = null;
-    private LatLng latLng = null;
-    public static final String TAG = "Trakemoi";
-    private LocationClient locationClient;
-    final Context context = this;
 
+    private String zoneName;
+    private String zoneDesc;
+    private static final int ZONE_RADIUS = 250;
+
+    private LocationClient locationClient;
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+    @Inject
+    DataAccessFactory dataAccessFactory;
+    private ZoneDataAccess zoneRepository;
 
     /**
      * Called when the activity is first created.
@@ -48,11 +61,18 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setTitle("Set Location");
+        setTitle(getResources().getString(R.string.location));
         setContentView(R.layout.location);
         setUpActionBar();
-        locationClient = new LocationClient(this, this, this);
         setUpMapIfNeeded();
+
+        zoneRepository = dataAccessFactory.zones(this);
+
+        locationClient = new LocationClient(this, this, this);
+
+        Bundle extras = getIntent().getExtras();
+        zoneName = extras.getString("zoneName");
+        zoneDesc = extras.getString("zoneDesc");
     }
 
     @Override
@@ -76,7 +96,6 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
     }
 
     private void setUpMap() {
-        uiSettings = map.getUiSettings();
         map.setMyLocationEnabled(true);
     }
 
@@ -154,30 +173,34 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
 
     @Override
     public void onMapClick(LatLng latLng) {
-        if(zone != null) {
-            deleteZone();
-        }
-        if(marker != null) {
-            deleteMarker();
-        }
-        Bundle bundle = getIntent().getExtras();
-        String zoneName = bundle.getString("zoneName");
-        marker = map.addMarker(new MarkerOptions().position(latLng).title(zoneName).draggable(true).icon(BitmapDescriptorFactory.fromResource(R.drawable.building)));
-        zone = map.addCircle(getCircleOptions(latLng));
+        deleteCircle();
+        deleteMarker();
+
+        marker = map.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title(zoneName)
+                .draggable(true)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.building)));
+
+        circle = map.addCircle(getCircleOptions(latLng));
     }
 
-    private void deleteZone(){
-        zone.remove();
+    private void deleteCircle(){
+        if(circle != null) {
+            circle.remove();
+        }
     }
 
     private void deleteMarker(){
-        marker.remove();
+        if(marker != null) {
+            marker.remove();
+        }
     }
 
     public CircleOptions getCircleOptions(LatLng latLng) {
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.center(latLng);
-        circleOptions.radius(250);
+        circleOptions.radius(ZONE_RADIUS);
         circleOptions.fillColor(Color.argb(25, 139, 0, 255));
         circleOptions.strokeColor(Color.argb(150, 139, 0, 255));
         circleOptions.strokeWidth(3.0f);
@@ -186,36 +209,40 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
 
     @Override
     public void onMarkerDragStart(Marker marker) {
-        deleteZone();
-        zone = map.addCircle(getCircleOptions(marker.getPosition()));
+        deleteCircle();
+        circle = map.addCircle(getCircleOptions(marker.getPosition()));
     }
 
     @Override
     public void onMarkerDrag(Marker marker) {
-        deleteZone();
-        zone = map.addCircle(getCircleOptions(marker.getPosition()));
+        deleteCircle();
+        circle = map.addCircle(getCircleOptions(marker.getPosition()));
     }
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        deleteZone();
-        zone = map.addCircle(getCircleOptions(marker.getPosition()));
+        deleteCircle();
+        circle = map.addCircle(getCircleOptions(marker.getPosition()));
     }
 
     public static class ErrorDialogFragment extends DialogFragment {
+
         private Dialog dialog;
 
         public ErrorDialogFragment() {
             super();
             dialog = null;
         }
+
         public void setDialog(Dialog dialog) {
-            dialog = dialog;
+            this.dialog = dialog;
         }
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return dialog;
         }
+
     }
 
     @Override
@@ -282,7 +309,40 @@ public class LocationActivity extends FragmentActivity implements GoogleMap.OnMa
     }
 
     public void save(MenuItem unused) {
-        Toast.makeText(this, "I just clicked the save button!", Toast.LENGTH_LONG).show();
+        if(marker != null)
+        {
+            Zone zone = prepareZone();
+            DialogFragment newFragment = new SaveZoneDialogFragment(zone);
+            newFragment.show(getSupportFragmentManager(), "save");
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Save Zone");
+            builder.setMessage("Zone location not specified");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.setIcon(R.drawable.trakemoi2);
+            builder.show();
+        }
+    }
+
+    private Zone prepareZone(){
+        return new Zone.Builder()
+                .withName(zoneName)
+                .withDesc(zoneDesc)
+                .withRadius(ZONE_RADIUS)
+                .withLatitude(marker.getPosition().latitude)
+                .withLongitude(marker.getPosition().longitude)
+                .build();
+    }
+
+    // TODO: This is bad
+    public void saveZone(Zone zone){
+        zoneRepository.addZone(zone);
+        setResult(RESULT_OK);
+        finish();
     }
 
 }

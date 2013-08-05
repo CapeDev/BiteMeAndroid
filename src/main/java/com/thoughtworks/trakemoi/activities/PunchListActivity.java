@@ -45,15 +45,16 @@ public class PunchListActivity extends RoboActivity {
         this.punchList = punchList;
         this.inOrOutBtn = inOrOutBtn;
     }
+
     public PunchListActivity(){
 
     }
 
     @Override
-    public void onCreate(Bundle b) {
-        super.onCreate(b);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setTitle("Punch List");
+        setTitle(getResources().getString(R.string.punchList));
         setContentView(R.layout.punch_list);
         setUpActionBar();
 
