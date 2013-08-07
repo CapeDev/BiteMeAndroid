@@ -22,7 +22,7 @@
             android:id="@+id/zone_select_location_button"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height"
-            android:text="@string/location"
+            android:text="@string/set_location"
             android:enabled="false"
             android:onClick="selectLocation"
             android:layout_below="@+id/zone_desc_input"

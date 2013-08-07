@@ -6,7 +6,8 @@
     <string name="token.secret">YkS9xm4cuhBwHFZM4i-HfbXgn14</string>
     <string name="create">Create Zone</string>
     <string name="app_name">TrakéMoi</string>
-    <string name="location">Set Location</string>
+    <string name="set_location">Set Location</string>
+    <string name="display_location">View Location</string>
     <string name="punchList">Punch List</string>
     <string name="go_button">GO</string>
     <string name="search_box">search</string>

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 import com.thoughtworks.trakemoi.models.Zone;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class ZoneDataAccess {
         database.close();
 
         zone.setId(zoneId);
-
+        System.out.println("INSERT Zone ********************** " + zoneId);
         return zoneId;
     }
 
@@ -69,6 +70,9 @@ public class ZoneDataAccess {
             }
         }
         database.close();
+        for(Zone zone : zones){
+            System.out.println("GET Zones ******************************************************* " + zone.getId());
+        }
         return zones;
     }
 

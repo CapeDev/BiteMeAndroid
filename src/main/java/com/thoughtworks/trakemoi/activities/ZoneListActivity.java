@@ -1,10 +1,13 @@
 package com.thoughtworks.trakemoi.activities;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.thoughtworks.trakemoi.R;
 import com.thoughtworks.trakemoi.adapters.ZoneListAdapter;
@@ -26,13 +29,6 @@ public class ZoneListActivity extends RoboActivity {
     DataAccessFactory dataAccessFactory;
     private ZoneDataAccess zoneRepository;
 
-    public ZoneListActivity(ListView zones) {
-        this.zones = zones;
-    }
-
-    public ZoneListActivity(){
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +36,20 @@ public class ZoneListActivity extends RoboActivity {
         setTitle(getResources().getString(R.string.zones));
         setContentView(R.layout.zone_list);
         setUpActionBar();
+
+        zones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
+                Zone selectedZone = (Zone)(zones.getItemAtPosition(position));
+
+                Intent intent = new Intent(ZoneListActivity.this, DisplayLocationActivity.class);
+                intent.putExtra("zoneName", selectedZone.getName());
+                intent.putExtra("zoneRadius", selectedZone.getRadius());
+                intent.putExtra("zoneLatitude", selectedZone.getLatitude());
+                intent.putExtra("zoneLongitude", selectedZone.getLongitude());
+                startActivity(intent);
+            }
+        });
 
         zoneRepository = dataAccessFactory.zones(this);
         syncAndLoadData(zoneRepository);

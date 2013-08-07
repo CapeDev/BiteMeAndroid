@@ -65,7 +65,7 @@ public class CreateZoneActivity extends TrakemoiActivity {
     }
 
     public void selectLocation(View unused) {
-        Intent intent = new Intent(this, LocationActivity.class);
+        Intent intent = new Intent(this, SetLocationActivity.class);
         intent.putExtra("zoneName", zoneName.getText().toString());
         intent.putExtra("zoneDesc", zoneDesc.getText().toString());
         startActivityForResult(intent, 1);

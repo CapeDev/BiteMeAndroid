@@ -39,10 +39,12 @@
     </activity>
     <activity android:name="com.thoughtworks.trakemoi.activities.RecordsSummaryActivity"/>
     <activity android:name="com.thoughtworks.trakemoi.activities.PunchListActivity"/>
-    <activity android:name="com.thoughtworks.trakemoi.activities.LocationActivity" />
+    <activity android:name="com.thoughtworks.trakemoi.activities.SetLocationActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.SearchActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.CreateZoneActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.ZoneListActivity" />
+    <activity android:name="com.thoughtworks.trakemoi.activities.DisplayLocationActivity" />
+
 
 
       <meta-data

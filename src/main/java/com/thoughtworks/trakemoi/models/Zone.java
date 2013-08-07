@@ -10,6 +10,7 @@ public class Zone {
     private double longitude;
 
     private Zone(Builder builder) {
+        this.id = builder.id;
         this.name = builder.name;
         this.desc = builder.desc;
         this.radius = builder.radius;
@@ -20,6 +21,11 @@ public class Zone {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Long getId() {
+        return this.id;
+    }
+
     public String getName() {
         return name;
     }
