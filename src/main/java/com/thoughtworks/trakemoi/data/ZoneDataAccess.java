@@ -24,7 +24,7 @@ public class ZoneDataAccess {
         database = sqLiteOpenHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TrakeMoiDatabase.NAME, zone.getName());
+        contentValues.put(TrakeMoiDatabase.ZONE_NAME, zone.getName());
         contentValues.put(TrakeMoiDatabase.DESC, zone.getDesc());
         contentValues.put(TrakeMoiDatabase.RADIUS, zone.getRadius());
         contentValues.put(TrakeMoiDatabase.LATITUDE, zone.getLatitude());
@@ -46,16 +46,16 @@ public class ZoneDataAccess {
         database = sqLiteOpenHelper.getReadableDatabase();
         try {
 
-            cursor = database.query(tableName, null, null, null, null, null, TrakeMoiDatabase.ROWID + " DESC");
+            cursor = database.query(tableName, null, null, null, null, null, TrakeMoiDatabase.ROW_ID + " DESC");
 
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     zones.add(
                             new Zone.Builder()
-                                    .withName(cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.NAME)))
+                                    .withName(cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_NAME)))
                                     .withDesc(cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.DESC)))
-                                    .withId(cursor.getLong(cursor.getColumnIndex(TrakeMoiDatabase.ROWID)))
+                                    .withId(cursor.getLong(cursor.getColumnIndex(TrakeMoiDatabase.ROW_ID)))
                                     .withRadius(cursor.getInt(cursor.getColumnIndex(TrakeMoiDatabase.RADIUS)))
                                     .withLatitude(cursor.getDouble(cursor.getColumnIndex(TrakeMoiDatabase.LATITUDE)))
                                     .withLongitude(cursor.getDouble(cursor.getColumnIndex(TrakeMoiDatabase.LONGITUDE)))

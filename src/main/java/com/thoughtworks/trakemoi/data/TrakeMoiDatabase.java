@@ -12,24 +12,15 @@ public class TrakeMoiDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "TrakeMoiDatabase";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String ROWID = "_ID";
+    public static final String ROW_ID = "_ID";
 
     public static final String PUNCH_TABLE = "punch";
-    public static final String STATUS = "status";
-    public static final String DATE = "date";
-    public static final String TIME = "time";
-
-    private static final String PUNCH_TABLE_CREATE_STMT =
-            "create table " + PUNCH_TABLE
-                    + " ("
-                    + ROWID + " integer primary key autoincrement, "
-                    + STATUS + " text not null, "
-                    + DATE + " text not null, "
-                    + TIME + " text not null"
-                    + ");";
+    public static final String ZONE_ID = "zone_id";
+    public static final String IN_TIME = "in_time";
+    public static final String OUT_TIME = "out_time";
 
     public static final String ZONE_TABLE = "zone";
-    public static final String NAME = "name";
+    public static final String ZONE_NAME = "zone_name";
     public static final String DESC = "desc";
     public static final String RADIUS = "radius";
     public static final String LATITUDE = "latitude";
@@ -38,12 +29,22 @@ public class TrakeMoiDatabase extends SQLiteOpenHelper {
     private static final String ZONE_TABLE_CREATE_STMT =
             "create table " + ZONE_TABLE
                     + " ("
-                    + ROWID + " integer primary key autoincrement, "
-                    + NAME + " text not null, "
+                    + ROW_ID + " integer primary key autoincrement, "
+                    + ZONE_NAME + " text not null, "
                     + DESC + " text not null, "
                     + RADIUS + " integer not null, "
                     + LATITUDE + " double not null, "
                     + LONGITUDE + " double not null"
+                    + ");";
+
+    private static final String PUNCH_TABLE_CREATE_STMT =
+            "create table " + PUNCH_TABLE
+                    + " ("
+                    + ROW_ID + " integer primary key autoincrement, "
+                    + ZONE_ID + " integer not null, "
+                    + IN_TIME + " integer not null, "
+                    + OUT_TIME + " integer, "
+                    + "foreign key(" + ZONE_ID + ") references " + ZONE_TABLE + "(" + ROW_ID + ") "
                     + ");";
 
     private TrakeMoiDatabase(Context context) {

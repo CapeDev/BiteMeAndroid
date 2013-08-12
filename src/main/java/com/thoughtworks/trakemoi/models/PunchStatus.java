@@ -3,48 +3,41 @@ package com.thoughtworks.trakemoi.models;
 public class PunchStatus {
 
     private Long id;
-
     private String status;
+    private String zoneName;
     private String date;
     private String time;
 
-    public PunchStatus(StatusBuilder statusBuilder) {
-        this.status = statusBuilder.status;
-        this.date = statusBuilder.date;
-        this.time = statusBuilder.time;
-        this.id = statusBuilder.id;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getZoneName() {
+        return zoneName;
     }
 
     public String getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getTime() {
         return time;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public PunchStatus(StatusBuilder statusBuilder) {
+        this.status = statusBuilder.status;
+        this.zoneName = statusBuilder.zoneName;
+        this.date = statusBuilder.date;
+        this.time = statusBuilder.time;
+        this.id = statusBuilder.id;
     }
 
     public static class StatusBuilder{
@@ -52,6 +45,7 @@ public class PunchStatus {
         private String status;
         private String date;
         private String time;
+        public String zoneName;
 
         public PunchStatus build(){
             return new PunchStatus(this);
@@ -73,6 +67,11 @@ public class PunchStatus {
 
         public StatusBuilder withTime(String time){
             this.time = time;
+            return this;
+        }
+
+        public StatusBuilder withZoneName(String zoneName){
+            this.zoneName = zoneName;
             return this;
         }
 

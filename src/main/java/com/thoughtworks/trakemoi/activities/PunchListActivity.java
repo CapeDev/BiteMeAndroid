@@ -20,6 +20,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -46,7 +47,7 @@ public class PunchListActivity extends RoboActivity {
         this.inOrOutBtn = inOrOutBtn;
     }
 
-    public PunchListActivity(){
+    public PunchListActivity() {
 
     }
 
@@ -69,7 +70,7 @@ public class PunchListActivity extends RoboActivity {
     private void setButtonTextFromPref() {
         if (preferences.getBoolean(punchedFlag, false)) {
             inOrOutBtn.setText(R.string.outPunch);
-        }else{
+        } else {
             inOrOutBtn.setText(R.string.inPunch);
         }
     }
@@ -122,12 +123,14 @@ public class PunchListActivity extends RoboActivity {
         punchList.setAdapter(adapter);
 
         Date date = new Date();
-        CharSequence dataString = DateFormat.format("EEEE, MMMM d, yyyy ", date.getTime());
+        CharSequence dateString = DateFormat.format("EEEE, MMMM d, yyyy ", date.getTime());
         CharSequence timeString = DateFormat.format("kk:mm:ss", date.getTime());
 
+        //TODO
         punchDatabase.addPunchStatus(new PunchStatus.StatusBuilder(punchStatus)
+                .withZoneName("TW")
                 .withTime(timeString.toString())
-                .withDate(dataString.toString())
+                .withDate(dateString.toString())
                 .build()
         );
     }
