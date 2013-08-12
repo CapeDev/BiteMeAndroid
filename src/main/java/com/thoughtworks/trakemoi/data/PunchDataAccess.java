@@ -98,9 +98,7 @@ public class PunchDataAccess {
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-//                    zoneName = cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_ID));
-                    //TODO
-                    zoneName = "TW";
+                    zoneName = cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_ID));
                     cursor.moveToNext();
                 }
             }
@@ -128,9 +126,7 @@ public class PunchDataAccess {
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-//                    zoneId = cursor.getInt(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_NAME));
-                    //TODO
-                    zoneId = 1;
+                    zoneId = cursor.getInt(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_NAME));
                     cursor.moveToNext();
                 }
             }

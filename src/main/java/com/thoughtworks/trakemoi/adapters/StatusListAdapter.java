@@ -37,6 +37,9 @@ public class StatusListAdapter extends ArrayAdapter<PunchStatus> {
         holder.status.setText(punchStatus.getStatus());
         holder.date.setText(punchStatus.getDate());
         holder.time.setText(punchStatus.getTime());
+//        holder.zoneName.setText(punchStatus.getZoneName());
+        holder.zoneName.setText("TW");
+
 
         return view;
     }
@@ -46,7 +49,8 @@ public class StatusListAdapter extends ArrayAdapter<PunchStatus> {
         ViewHolder viewHolder = new ViewHolder(
                 (TextView) view.findViewById(R.id.status),
                 (TextView) view.findViewById(R.id.date),
-                (TextView) view.findViewById(R.id.time));
+                (TextView) view.findViewById(R.id.time),
+                (TextView) view.findViewById(R.id.zoneName));
 
         view.setTag(viewHolder);
 
@@ -58,11 +62,13 @@ public class StatusListAdapter extends ArrayAdapter<PunchStatus> {
         protected final TextView status;
         protected final TextView date;
         protected final TextView time;
+        protected final TextView zoneName;
 
-        public ViewHolder(TextView status, TextView date, TextView time) {
+        public ViewHolder(TextView status, TextView date, TextView time, TextView zoneName) {
             this.status = status;
             this.date = date;
             this.time = time;
+            this.zoneName = zoneName;
         }
     }
 
