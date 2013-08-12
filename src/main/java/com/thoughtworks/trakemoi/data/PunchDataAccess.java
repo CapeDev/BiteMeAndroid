@@ -63,37 +63,24 @@ public class PunchDataAccess {
         String statusTime = getStatusTime(statusTimeStamp);
         String statusDate = getStatusDate(statusTimeStamp);
 
-        PunchStatus inPunchStatus = new PunchStatus.StatusBuilder(status)
+        if (IN_STATUS.equals(status)) {
+            punchStatuses.add(buildPunchStatusBasedOn(cursor, status, statusTime, statusDate));
+        } else if (OUT_STATUS.equals(status)) {
+            punchStatuses.add(buildPunchStatusBasedOn(cursor, status, statusTime, statusDate));
+
+            long inTimeStamp = cursor.getLong(cursor.getColumnIndex(IN_TIME));
+            punchStatuses.add(buildPunchStatusBasedOn(cursor, IN_STATUS, getStatusTime(inTimeStamp), getStatusDate(inTimeStamp)));
+
+        }
+    }
+
+    private PunchStatus buildPunchStatusBasedOn(Cursor cursor, String status, String statusTime, String statusDate) {
+        return new PunchStatus.StatusBuilder(status)
                 .withTime(statusTime)
                 .withDate(statusDate)
                 .withZoneName(provideZoneNameBasedOnActivity(cursor))
                 .withId(cursor.getLong(cursor.getColumnIndex(ROW_ID)))
                 .build();
-        punchStatuses.add(inPunchStatus);
-
-
-//        if (IN_STATUS.equals(status)) {
-//            PunchStatus inPunchStatus = new PunchStatus.StatusBuilder(status)
-//                    .withTime(statusTime)
-//                    .withDate(statusDate)
-//                    .withZoneName(provideZoneNameBasedOnActivity(cursor))
-//                    .withId(cursor.getLong(cursor.getColumnIndex(ROW_ID)))
-//                    .build();
-//            punchStatuses.add(inPunchStatus);
-//            if (PUNCH_TMP == null) {
-//                PUNCH_TMP = inPunchStatus;
-//            }
-//        } else if (OUT_STATUS.equals(status) && PUNCH_TMP != null ) {
-//            punchStatuses.add(PUNCH_TMP);
-//            PunchStatus outPunchStatus = new PunchStatus.StatusBuilder(status)
-//                    .withTime(statusTime)
-//                    .withDate(statusDate)
-//                    .withZoneName(provideZoneNameBasedOnActivity(cursor))
-//                    .withId(cursor.getLong(cursor.getColumnIndex(ROW_ID)))
-//                    .build();
-//            punchStatuses.add(outPunchStatus);
-//            PUNCH_TMP = null;
-//        }
     }
 
     public String getZoneNameFromZoneId(long zoneId) {
