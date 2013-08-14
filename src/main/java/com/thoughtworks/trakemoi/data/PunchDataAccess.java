@@ -18,6 +18,7 @@ import static com.thoughtworks.trakemoi.data.TrakeMoiDatabase.*;
 
 public class PunchDataAccess {
 
+    public static final String ZONE_LIST_IS_EMPTY = "Zone list is empty!";
     private final String IN_STATUS = "In";
     private final String OUT_STATUS = "Out";
     private final String ERROR_MSG = "ERROR";
@@ -26,13 +27,12 @@ public class PunchDataAccess {
     private SQLiteOpenHelper sqLiteOpenHelper;
     private String tableName = PUNCH_TABLE;
     private String WAIT_FOR_OUT_PUNCH = "WAIT FOR OUT";
-    private PunchStatus PUNCH_TMP = null;
 
     public PunchDataAccess(SQLiteOpenHelper sqLiteOpenHelper) {
         this.sqLiteOpenHelper = sqLiteOpenHelper;
     }
 
-    public Iterable<PunchStatus> loadPunchDataResults() {
+    public Iterable<PunchStatus> loadPunchDataResults() throws TrakeMoiDatabaseException {
         Cursor cursor = null;
         List<PunchStatus> punchStatuses = new ArrayList<PunchStatus>();
 
@@ -57,16 +57,18 @@ public class PunchDataAccess {
         return punchStatuses;
     }
 
-    private void addToPunchStatusesFromPunchDataDB(Cursor cursor, List<PunchStatus> punchStatuses) {
+    private void addToPunchStatusesFromPunchDataDB(Cursor cursor, List<PunchStatus> punchStatuses) throws TrakeMoiDatabaseException {
         String status = provideStatusBasedOnTime(cursor);
         long statusTimeStamp = getTimeStampFromDB(cursor);
         String statusTime = getStatusTime(statusTimeStamp);
         String statusDate = getStatusDate(statusTimeStamp);
 
+        PunchStatus punchStatus = buildPunchStatusBasedOn(cursor, status, statusTime, statusDate);
+
         if (IN_STATUS.equals(status)) {
-            punchStatuses.add(buildPunchStatusBasedOn(cursor, status, statusTime, statusDate));
+            punchStatuses.add(punchStatus);
         } else if (OUT_STATUS.equals(status)) {
-            punchStatuses.add(buildPunchStatusBasedOn(cursor, status, statusTime, statusDate));
+            punchStatuses.add(punchStatus);
 
             long inTimeStamp = cursor.getLong(cursor.getColumnIndex(IN_TIME));
             punchStatuses.add(buildPunchStatusBasedOn(cursor, IN_STATUS, getStatusTime(inTimeStamp), getStatusDate(inTimeStamp)));
@@ -74,31 +76,36 @@ public class PunchDataAccess {
         }
     }
 
-    private PunchStatus buildPunchStatusBasedOn(Cursor cursor, String status, String statusTime, String statusDate) {
+    private PunchStatus buildPunchStatusBasedOn(Cursor cursor, String status, String statusTime, String statusDate) throws TrakeMoiDatabaseException {
+        String zoneName = provideZoneNameBasedOnActivity(cursor);
+
         return new PunchStatus.StatusBuilder(status)
                 .withTime(statusTime)
                 .withDate(statusDate)
-                .withZoneName(provideZoneNameBasedOnActivity(cursor))
+                .withZoneName(zoneName)
                 .withId(cursor.getLong(cursor.getColumnIndex(ROW_ID)))
                 .build();
     }
 
-    public String getZoneNameFromZoneId(long zoneId) {
+    public String getZoneNameFromZoneId(long zoneId) throws TrakeMoiDatabaseException {
         String[] columns = {TrakeMoiDatabase.ZONE_NAME};
         String selection = TrakeMoiDatabase.ROW_ID + " = ?";
         String[] selectionArgs = {String.valueOf(zoneId)};
 
-        database = sqLiteOpenHelper.getReadableDatabase();
-
         Cursor cursor = null;
         String zoneName = null;
+        database = sqLiteOpenHelper.getReadableDatabase();
+
+        checkZoneAvailability();
 
         try {
-            cursor = database.query(TrakeMoiDatabase.ZONE_TABLE, columns, selection, selectionArgs, null, null, null, null);
+            cursor = database.query(ZONE_TABLE, columns, selection, selectionArgs, null, null, null, null);
             if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
+                    System.out.println("--------zoneId--------" + cursor.getColumnIndex(TrakeMoiDatabase.ZONE_ID));
                     zoneName = cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_ID));
+
                     cursor.moveToNext();
                 }
             }
@@ -111,12 +118,27 @@ public class PunchDataAccess {
         return zoneName;
     }
 
-    public int getZoneIdFromZoneName(String zoneName) {
+    public void checkZoneAvailability() throws TrakeMoiDatabaseException {
+        Cursor zoneCursor;
+        String selectClause = "select * from " + ZONE_TABLE;
+        database = sqLiteOpenHelper.getReadableDatabase();
+        zoneCursor = database.rawQuery(selectClause, null);
+        System.out.println("----------zoneTable Count------" + zoneCursor.getCount());
+
+        if (zoneCursor.getCount() == 0 || zoneCursor == null) {
+            System.out.println("----------error ------" + zoneCursor.getCount());
+            throw new TrakeMoiDatabaseException(ZONE_LIST_IS_EMPTY);
+        }
+    }
+
+    public int getZoneIdFromZoneName(String zoneName) throws TrakeMoiDatabaseException {
         String[] columns = {TrakeMoiDatabase.ROW_ID};
         String selection = TrakeMoiDatabase.ZONE_NAME + " = ?";
         String[] selectionArgs = {zoneName};
 
         database = sqLiteOpenHelper.getReadableDatabase();
+
+        checkZoneAvailability();
 
         Cursor cursor = null;
         int zoneId = -1;
@@ -166,7 +188,7 @@ public class PunchDataAccess {
         return timeStamp;
     }
 
-    private String provideZoneNameBasedOnActivity(Cursor cursor) {
+    private String provideZoneNameBasedOnActivity(Cursor cursor) throws TrakeMoiDatabaseException {
         int zoneId = cursor.getColumnIndex(ZONE_ID);
         return getZoneNameFromZoneId(zoneId);
     }
@@ -185,7 +207,7 @@ public class PunchDataAccess {
         return ERROR_MSG;
     }
 
-    public long addPunchStatus(PunchStatus punch) {
+    public long addPunchStatus(PunchStatus punch) throws TrakeMoiDatabaseException {
         database = sqLiteOpenHelper.getWritableDatabase();
 
         int zoneId = getZoneIdFromZoneName(punch.getZoneName());

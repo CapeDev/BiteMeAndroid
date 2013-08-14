@@ -11,16 +11,17 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.thoughtworks.trakemoi.R;
 import com.thoughtworks.trakemoi.adapters.StatusListAdapter;
 import com.thoughtworks.trakemoi.data.DataAccessFactory;
 import com.thoughtworks.trakemoi.data.PunchDataAccess;
+import com.thoughtworks.trakemoi.data.TrakeMoiDatabaseException;
 import com.thoughtworks.trakemoi.models.PunchStatus;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 import javax.inject.Inject;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
@@ -62,9 +63,18 @@ public class PunchListActivity extends RoboActivity {
         setInitAndPunchFlagInPref();
 
         punchDatabase = dataAccessFactory.punch(this);
+        try {
+            checkZoneAvailablity(punchDatabase);
+        } catch (TrakeMoiDatabaseException e) {
+            Toast.makeText(getBaseContext(), "You need have at least one zone saved to start here!", Toast.LENGTH_LONG).show();
+            super.onBackPressed();
+        }
         syncAndLoadData(punchDatabase);
-
         setButtonTextFromPref();
+    }
+
+    private void checkZoneAvailablity(PunchDataAccess punchDatabase) throws TrakeMoiDatabaseException {
+        punchDatabase.checkZoneAvailability();
     }
 
     private void setButtonTextFromPref() {
@@ -92,13 +102,17 @@ public class PunchListActivity extends RoboActivity {
         inOrOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPunchAndSyncButtonText(punchDatabase, inOrOutBtn);
+                try {
+                    addPunchAndSyncButtonText(punchDatabase, inOrOutBtn);
+                } catch (TrakeMoiDatabaseException e) {
+                    Toast.makeText(getBaseContext(), "You need have at least one zone saved to start here!", Toast.LENGTH_LONG).show();
+                }
                 syncAndLoadData(punchDatabase);
             }
         });
     }
 
-    private void addPunchAndSyncButtonText(PunchDataAccess punchDatabase, Button inOrOutBtn) {
+    private void addPunchAndSyncButtonText(PunchDataAccess punchDatabase, Button inOrOutBtn) throws TrakeMoiDatabaseException {
         if (inOrOutBtn == null || inOrOutBtn.getText() == null)
             return;
 
@@ -118,7 +132,7 @@ public class PunchListActivity extends RoboActivity {
         }
     }
 
-    private void addPunchData(final PunchDataAccess punchDatabase, String punchStatus) {
+    private void addPunchData(final PunchDataAccess punchDatabase, String punchStatus) throws TrakeMoiDatabaseException {
         final StatusListAdapter adapter = new StatusListAdapter(this);
         punchList.setAdapter(adapter);
 
@@ -128,7 +142,6 @@ public class PunchListActivity extends RoboActivity {
 
         //TODO
         punchDatabase.addPunchStatus(new PunchStatus.StatusBuilder(punchStatus)
-                .withZoneName("TW")
                 .withTime(timeString.toString())
                 .withDate(dateString.toString())
                 .build()
@@ -148,12 +161,18 @@ public class PunchListActivity extends RoboActivity {
 
             @Override
             protected Iterable<PunchStatus> doInBackground(Void... params) {
-                return punchDatabase.loadPunchDataResults();
+                try {
+                    return punchDatabase.loadPunchDataResults();
+                } catch (TrakeMoiDatabaseException e) {
+                    return null;
+                }
             }
 
             @Override
             protected void onPostExecute(Iterable<PunchStatus> punchStatuses) {
-                adapter.addAll((Collection<? extends PunchStatus>) punchStatuses);
+                if (punchStatuses != null) {
+                    adapter.addAll((Collection<? extends PunchStatus>) punchStatuses);
+                }
                 setProgressBarIndeterminateVisibility(false);
             }
         }.execute();
