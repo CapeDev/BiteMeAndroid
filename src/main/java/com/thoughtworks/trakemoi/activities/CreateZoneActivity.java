@@ -16,6 +16,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.thoughtworks.trakemoi.R;
 import com.thoughtworks.trakemoi.data.DataAccessFactory;
+import com.thoughtworks.trakemoi.data.PunchDataAccess;
 import com.thoughtworks.trakemoi.data.ZoneDataAccess;
 import com.thoughtworks.trakemoi.models.Zone;
 import roboguice.inject.InjectView;
@@ -30,6 +31,7 @@ public class CreateZoneActivity extends TrakemoiActivity implements
         GooglePlayServicesClient.OnConnectionFailedListener {
 
     public static final String THE_ZONE_NAME_EXISTS = "The zone Name exists";
+
     @InjectView(R.id.zone_name_input)
     private EditText zoneName;
 
@@ -42,6 +44,7 @@ public class CreateZoneActivity extends TrakemoiActivity implements
     @Inject
     DataAccessFactory dataAccessFactory;
     private ZoneDataAccess zoneDataAccess;
+    private PunchDataAccess punchDataAccess;
 
     @Override
     public void onCreate(Bundle b) {
@@ -66,29 +69,40 @@ public class CreateZoneActivity extends TrakemoiActivity implements
 
     @Override
     public void onDisconnected() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void onAddGeofencesResult(int i, String[] strings) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
+
+//    public void addPunchToDBBasedOnZone(String ids, String transitionType) {
+//        System.out.println("--------------GeoFence Punching------");
+//        if (transitionType == null || transitionType.equals(""))
+//            punchDataAccess = dataAccessFactory.punch(this);
+//        try {
+//            if (ENTERED.equals(transitionType)) {
+//                Util.addPunchData(punchDatabase, "In", ids);
+//                System.out.println("Entered-----------------------");
+//            } else if (EXITED.equals(transitionType)) {
+//                Util.addPunchData(punchDatabase, "Out", ids);
+//            }
+//        } catch (TrakeMoiDatabaseException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
+//    }
 
     private class ZoneWatcher implements TextWatcher {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // TODO Auto-generated method stub
         }
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // TODO Auto-generated method stub
         }
 
         @Override

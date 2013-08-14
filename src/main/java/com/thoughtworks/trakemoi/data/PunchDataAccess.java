@@ -104,7 +104,8 @@ public class PunchDataAccess {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     System.out.println("--------zoneId--------" + cursor.getColumnIndex(TrakeMoiDatabase.ZONE_ID));
-                    zoneName = cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_ID));
+                    zoneName = cursor.getString(cursor.getColumnIndex(TrakeMoiDatabase.ZONE_NAME));
+                    System.out.println("--------zoneName--------" + zoneName);
 
                     cursor.moveToNext();
                 }

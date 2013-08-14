@@ -10,11 +10,17 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 import com.thoughtworks.trakemoi.R;
 import com.thoughtworks.trakemoi.activities.HomeActivity;
-import com.thoughtworks.trakemoi.activities.PunchListActivity;
+import com.thoughtworks.trakemoi.data.DataAccessFactory;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class ReceiveTransitionsIntentService extends IntentService {
+
+    private static final String ENTERED = "Entered";
+    private static final String EXITED = "Exited";
+    @Inject
+    DataAccessFactory dataAccessFactory;
 
     public static final String CATEGORY_LOCATION_SERVICES =
             "com.thoughtworks.trakemoi.geofence.CATEGORY_LOCATION_SERVICES";
@@ -32,6 +38,11 @@ public class ReceiveTransitionsIntentService extends IntentService {
     }
 
     @Override
+    public void onCreate(){
+        super.onCreate();
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
         Intent broadcastIntent = new Intent();
         broadcastIntent.addCategory(CATEGORY_LOCATION_SERVICES);
@@ -43,21 +54,22 @@ public class ReceiveTransitionsIntentService extends IntentService {
             System.out.println("Something went wrong in handle intent: " + errorMessage);
 
             broadcastIntent.setAction(ACTION_GEOFENCE_ERROR)
-                           .putExtra(EXTRA_GEOFENCE_STATUS, errorMessage);
+                    .putExtra(EXTRA_GEOFENCE_STATUS, errorMessage);
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-        }
-        else {
+        } else {
             int transition = LocationClient.getGeofenceTransition(intent);
             if (transition == Geofence.GEOFENCE_TRANSITION_ENTER || transition == Geofence.GEOFENCE_TRANSITION_EXIT) {
                 List<Geofence> geofences = LocationClient.getTriggeringGeofences(intent);
                 String[] geofenceIds = new String[geofences.size()];
-                for (int index = 0; index < geofences.size() ; index++) {
+                for (int index = 0; index < geofences.size(); index++) {
                     geofenceIds[index] = geofences.get(index).getRequestId();
                 }
                 String ids = TextUtils.join(GEOFENCE_ID_DELIMITER, geofenceIds);
                 String transitionType = getTransitionString(transition);
                 //TODO: LINA
+
+//                addPunchToDBBasedOnZone(ids, transitionType);
 
                 sendNotification(transitionType, ids);
 
@@ -69,13 +81,16 @@ public class ReceiveTransitionsIntentService extends IntentService {
                 Log.d("TRAKEMOI",
                         getString(R.string.geofence_transition_notification_text));
 
-            }
-            else {
+            } else {
                 Log.e("TRAKEMOI",
                         getString(R.string.geofence_transition_invalid_type, transition));
             }
         }
     }
+
+//    private void addPunchToDBBasedOnZone(String ids, String transitionType) {
+//
+//    }
 
     private void sendNotification(String transitionType, String ids) {
         Intent notificationIntent =
@@ -96,12 +111,12 @@ public class ReceiveTransitionsIntentService extends IntentService {
                 .setContentIntent(notificationPendingIntent);
 
         NotificationManager notificationManager =
-            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0, builder.build());
     }
 
-    private String getTransitionString(int transitionType) {
+    public String getTransitionString(int transitionType) {
         switch (transitionType) {
             case Geofence.GEOFENCE_TRANSITION_ENTER:
                 return getString(R.string.geofence_transition_entered);

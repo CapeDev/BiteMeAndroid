@@ -37,9 +37,7 @@ public class StatusListAdapter extends ArrayAdapter<PunchStatus> {
         holder.status.setText(punchStatus.getStatus());
         holder.date.setText(punchStatus.getDate());
         holder.time.setText(punchStatus.getTime());
-//        holder.zoneName.setText(punchStatus.getZoneName());
-        holder.zoneName.setText("TW");
-
+        holder.zoneName.setText(punchStatus.getZoneName());
 
         return view;
     }

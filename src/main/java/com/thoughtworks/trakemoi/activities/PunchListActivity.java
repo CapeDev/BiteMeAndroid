@@ -131,7 +131,7 @@ public class PunchListActivity extends RoboActivity {
         }
     }
 
-    private void addPunchData(final PunchDataAccess punchDatabase, String punchStatus) throws TrakeMoiDatabaseException {
+    private void addPunchData(final PunchDataAccess punchDatabase, String punchStatus, String zoneId) throws TrakeMoiDatabaseException {
         final StatusListAdapter adapter = new StatusListAdapter(this);
         punchList.setAdapter(adapter);
 
@@ -139,14 +139,24 @@ public class PunchListActivity extends RoboActivity {
         CharSequence dateString = DateFormat.format("EEEE, MMMM d, yyyy ", date.getTime());
         CharSequence timeString = DateFormat.format("kk:mm:ss", date.getTime());
 
-        //TODO
-        String zoneName  = "TW" ;
+        String zoneName;
+        if (zoneId != null) {
+            zoneName = punchDatabase.getZoneNameFromZoneId(Long.valueOf(zoneId).longValue());
+            System.out.println("*****************************zoneName" + zoneName);
+        } else {
+            zoneName = "Default Unknown zone";
+        }
+
         punchDatabase.addPunchStatus(new PunchStatus.StatusBuilder(punchStatus)
                 .withTime(timeString.toString())
                 .withDate(dateString.toString())
                 .withZoneName(zoneName)
                 .build()
         );
+    }
+
+    private void addPunchData(final PunchDataAccess punchDatabase, String punchStatus) throws TrakeMoiDatabaseException {
+        addPunchData(punchDatabase, punchStatus, null);
     }
 
     private void syncAndLoadData(final PunchDataAccess punchDatabase) {
