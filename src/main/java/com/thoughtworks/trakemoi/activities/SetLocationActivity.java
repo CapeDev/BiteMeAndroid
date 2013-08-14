@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,9 +27,12 @@ import com.thoughtworks.trakemoi.R;
 import com.thoughtworks.trakemoi.data.DataAccessFactory;
 import com.thoughtworks.trakemoi.data.ZoneDataAccess;
 import com.thoughtworks.trakemoi.dialog.SaveZoneDialogFragment;
+import com.thoughtworks.trakemoi.geofence.GeofenceRequester;
 import com.thoughtworks.trakemoi.models.Zone;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SetLocationActivity extends LocationActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerDragListener, LocationListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
@@ -43,6 +48,26 @@ public class SetLocationActivity extends LocationActivity implements GoogleMap.O
 
     private LocationClient locationClient;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+    public enum REQUEST_TYPE {ADD, REMOVE}
+
+    private REQUEST_TYPE requestType;
+
+    List<Geofence> currentGeofences;
+
+    private GeofenceRequester geofenceRequester;
+
+    /*
+     * Use to set an expiration time for a geofence. After this amount
+     * of time Location Services will stop tracking the geofence.
+     * Remember to unregister a geofence when you're finished with it.
+     * Otherwise, your app will use up battery. To continue monitoring
+     * a geofence indefinitely, set the expiration time to
+     * Geofence#NEVER_EXPIRE.
+     */
+    private static final long GEOFENCE_EXPIRATION_IN_HOURS = 12;
+    private static final long GEOFENCE_EXPIRATION_IN_MILLISECONDS =
+            GEOFENCE_EXPIRATION_IN_HOURS * DateUtils.HOUR_IN_MILLIS;
 
     /**
      * Called when the activity is first created.
@@ -66,6 +91,9 @@ public class SetLocationActivity extends LocationActivity implements GoogleMap.O
         Bundle extras = getIntent().getExtras();
         zoneName = extras.getString("zoneName");
         zoneDesc = extras.getString("zoneDesc");
+
+        currentGeofences = new ArrayList<Geofence>();
+        geofenceRequester = new GeofenceRequester(this);
     }
 
 
@@ -188,8 +216,26 @@ public class SetLocationActivity extends LocationActivity implements GoogleMap.O
     // TODO: This is bad
     public void saveZone(Zone zone){
         zoneRepository.addZone(zone);
-        setResult(RESULT_OK);
-        finish();
+
+        //paste
+        requestType = REQUEST_TYPE.ADD;
+
+        if (!servicesConnected()) {
+            return;
+        }
+
+        currentGeofences.add(zone.toGeofence());
+
+        try {
+            geofenceRequester.addGeofences(currentGeofences);
+        } catch (UnsupportedOperationException e) {
+            Toast.makeText(this, "Something bad happened",
+                    Toast.LENGTH_LONG).show();
+        }
+        //end paste
+
+        //setResult(RESULT_OK);
+        //finish();
     }
 
     @Override

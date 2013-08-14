@@ -1,5 +1,7 @@
 package com.thoughtworks.trakemoi.models;
 
+import com.google.android.gms.location.Geofence;
+
 public class Zone {
 
     private Long id;
@@ -93,4 +95,15 @@ public class Zone {
         }
     }
 
+    public Geofence toGeofence() {
+        return new Geofence.Builder()
+                .setRequestId("" + getId())
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setCircularRegion(
+                        getLatitude(),
+                        getLongitude(),
+                        getRadius())
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .build();
+    }
 }

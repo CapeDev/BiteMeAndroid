@@ -9,10 +9,16 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.thoughtworks.trakemoi.R;
 import roboguice.inject.InjectView;
 
-public class CreateZoneActivity extends TrakemoiActivity {
+public class CreateZoneActivity extends TrakemoiActivity implements
+        LocationClient.OnAddGeofencesResultListener,
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener {
 
     @InjectView(R.id.zone_name_input)
     private EditText zoneName;
@@ -34,6 +40,29 @@ public class CreateZoneActivity extends TrakemoiActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
         imm.showSoftInput(zoneName, InputMethodManager.SHOW_IMPLICIT);
         zoneDesc.addTextChangedListener(new ZoneWatcher());
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        processPendingZones();
+    }
+
+    private void processPendingZones() {
+    }
+
+    @Override
+    public void onDisconnected() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onAddGeofencesResult(int i, String[] strings) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private class ZoneWatcher implements TextWatcher {

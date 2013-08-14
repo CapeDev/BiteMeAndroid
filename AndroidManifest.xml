@@ -47,9 +47,10 @@
 
 
 
-      <meta-data
+    <meta-data
         android:name="com.google.android.maps.v2.API_KEY"
         android:value="AIzaSyAEh4v2ZU1tUgvAKilZdrVVL-qOHpZtjt8"/>
+    <service android:name="com.thoughtworks.trakemoi.geofence.ReceiveTransitionsIntentService" android:exported="false"></service>
 
   </application>
 
