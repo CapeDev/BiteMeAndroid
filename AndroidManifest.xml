@@ -45,11 +45,9 @@
     <activity android:name="com.thoughtworks.trakemoi.activities.ZoneListActivity" />
     <activity android:name="com.thoughtworks.trakemoi.activities.DisplayLocationActivity" />
 
-
-
     <meta-data
         android:name="com.google.android.maps.v2.API_KEY"
-        android:value="AIzaSyAEh4v2ZU1tUgvAKilZdrVVL-qOHpZtjt8"/>
+                android:value="AIzaSyDXHJXzjSv7X3r_BATFRfv9bfjB_lG6gns"/>
     <service android:name="com.thoughtworks.trakemoi.geofence.ReceiveTransitionsIntentService" android:exported="false"></service>
 
   </application>

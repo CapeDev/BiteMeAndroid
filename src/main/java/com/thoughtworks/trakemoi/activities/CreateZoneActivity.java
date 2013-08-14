@@ -1,5 +1,7 @@
 package com.thoughtworks.trakemoi.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,13 +15,21 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.thoughtworks.trakemoi.R;
+import com.thoughtworks.trakemoi.data.DataAccessFactory;
+import com.thoughtworks.trakemoi.data.ZoneDataAccess;
+import com.thoughtworks.trakemoi.models.Zone;
 import roboguice.inject.InjectView;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateZoneActivity extends TrakemoiActivity implements
         LocationClient.OnAddGeofencesResultListener,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener {
 
+    public static final String THE_ZONE_NAME_EXISTS = "The zone Name exists";
     @InjectView(R.id.zone_name_input)
     private EditText zoneName;
 
@@ -28,6 +38,10 @@ public class CreateZoneActivity extends TrakemoiActivity implements
 
     @InjectView(R.id.zone_select_location_button)
     private Button setLocation;
+
+    @Inject
+    DataAccessFactory dataAccessFactory;
+    private ZoneDataAccess zoneDataAccess;
 
     @Override
     public void onCreate(Bundle b) {
@@ -84,25 +98,56 @@ public class CreateZoneActivity extends TrakemoiActivity implements
 
     }
 
-    private boolean isZoneComplete(){
-        if(zoneName.getText().toString().length() > 0 && zoneDesc.getText().toString().length() > 0) {
+    private boolean isZoneComplete() {
+        if (zoneName.getText().toString().length() > 0 && zoneDesc.getText().toString().length() > 0) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
     public void selectLocation(View unused) {
         Intent intent = new Intent(this, SetLocationActivity.class);
-        intent.putExtra("zoneName", zoneName.getText().toString());
-        intent.putExtra("zoneDesc", zoneDesc.getText().toString());
-        startActivityForResult(intent, 1);
+
+        String currentZoneName = zoneName.getText().toString();
+        boolean found = compareZoneNameInDB(currentZoneName);
+        if (found) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Reminder");
+            builder.setMessage(THE_ZONE_NAME_EXISTS);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.setIcon(R.drawable.trakemoi2);
+            builder.show();
+        } else {
+            intent.putExtra("zoneName", currentZoneName);
+            intent.putExtra("zoneDesc", zoneDesc.getText().toString());
+            startActivityForResult(intent, 1);
+        }
+    }
+
+    private boolean compareZoneNameInDB(String currentZoneName) {
+        zoneDataAccess = dataAccessFactory.zones(this);
+        List<Zone> zones = zoneDataAccess.getZones();
+
+        List<String> zoneNames = new ArrayList<String>();
+        if (zones != null) {
+            for (Zone zone : zones) {
+                zoneNames.add(zone.getName());
+            }
+        }
+
+        if (zoneNames != null && zoneNames.contains(currentZoneName)) {
+            return true;
+        }
+        return false;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 finish();
             }
         }

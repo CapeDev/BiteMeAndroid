@@ -10,6 +10,7 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
 import com.thoughtworks.trakemoi.R;
 import com.thoughtworks.trakemoi.activities.HomeActivity;
+import com.thoughtworks.trakemoi.activities.PunchListActivity;
 
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class ReceiveTransitionsIntentService extends IntentService {
                 }
                 String ids = TextUtils.join(GEOFENCE_ID_DELIMITER, geofenceIds);
                 String transitionType = getTransitionString(transition);
+                //TODO: LINA
 
                 sendNotification(transitionType, ids);
 

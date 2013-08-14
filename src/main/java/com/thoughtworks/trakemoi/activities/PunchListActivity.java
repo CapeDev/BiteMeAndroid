@@ -59,12 +59,11 @@ public class PunchListActivity extends RoboActivity {
         setTitle(getResources().getString(R.string.punchList));
         setContentView(R.layout.punch_list);
         setUpActionBar();
-
         setInitAndPunchFlagInPref();
 
         punchDatabase = dataAccessFactory.punch(this);
         try {
-            checkZoneAvailablity(punchDatabase);
+            checkZoneAvailability(punchDatabase);
         } catch (TrakeMoiDatabaseException e) {
             Toast.makeText(getBaseContext(), "You need have at least one zone saved to start here!", Toast.LENGTH_LONG).show();
             super.onBackPressed();
@@ -73,7 +72,23 @@ public class PunchListActivity extends RoboActivity {
         setButtonTextFromPref();
     }
 
-    private void checkZoneAvailablity(PunchDataAccess punchDatabase) throws TrakeMoiDatabaseException {
+    @Override
+    public void onResume() {
+        super.onResume();
+        inOrOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    addPunchAndSyncButtonText(punchDatabase, inOrOutBtn);
+                } catch (TrakeMoiDatabaseException e) {
+                    Toast.makeText(getBaseContext(), "You need have at least one zone saved to start here!", Toast.LENGTH_LONG).show();
+                }
+                syncAndLoadData(punchDatabase);
+            }
+        });
+    }
+
+    private void checkZoneAvailability(PunchDataAccess punchDatabase) throws TrakeMoiDatabaseException {
         punchDatabase.checkZoneAvailability();
     }
 
@@ -94,22 +109,6 @@ public class PunchListActivity extends RoboActivity {
             editor.putBoolean(punchedFlag, false);
             editor.commit();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        inOrOutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    addPunchAndSyncButtonText(punchDatabase, inOrOutBtn);
-                } catch (TrakeMoiDatabaseException e) {
-                    Toast.makeText(getBaseContext(), "You need have at least one zone saved to start here!", Toast.LENGTH_LONG).show();
-                }
-                syncAndLoadData(punchDatabase);
-            }
-        });
     }
 
     private void addPunchAndSyncButtonText(PunchDataAccess punchDatabase, Button inOrOutBtn) throws TrakeMoiDatabaseException {
@@ -141,9 +140,11 @@ public class PunchListActivity extends RoboActivity {
         CharSequence timeString = DateFormat.format("kk:mm:ss", date.getTime());
 
         //TODO
+        String zoneName  = "TW" ;
         punchDatabase.addPunchStatus(new PunchStatus.StatusBuilder(punchStatus)
                 .withTime(timeString.toString())
                 .withDate(dateString.toString())
+                .withZoneName(zoneName)
                 .build()
         );
     }
