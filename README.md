@@ -12,7 +12,7 @@ You'll need maven. Lucky you. Once you have maven, do the following:
 
 ```
 git submodule update --init --recursive
-mvn install
+mvn clean install
 
 ```
 
@@ -20,7 +20,6 @@ You can install the app by :
 
 ```
 adb install -r target/trakemoi-1.0.apk
-
 ```
 
 You need Google Play Service installed in order to provide google map service
@@ -51,6 +50,6 @@ calabash-android run target/trakemoi-1.0.apk
 
 More information:
 ==============
-With Google Play Service rev.7
+With Google Play Service rev.7  
 [More detalis](http://ifyouseeit.org/blog/2013/07/13/google-map-on-android-with-play-service-7/)
 
