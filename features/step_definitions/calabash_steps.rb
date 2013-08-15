@@ -5,3 +5,6 @@ And /^I search for "([^"]+)"$/ do |search_item|
   page.search_yelp(search_item)
 end
 
+
+Then(/^I should see nothing$/) do
+end
